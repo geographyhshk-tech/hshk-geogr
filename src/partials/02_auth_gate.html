@@ -1,0 +1,489 @@
+  <script>
+    (function () {
+      window.switchAuthGateTab = window.switchAuthGateTab || function (tab) {
+        if (window.GeoAuthGateModule && typeof window.GeoAuthGateModule.switchAuthGateTab === "function") {
+          return window.GeoAuthGateModule.switchAuthGateTab(tab);
+        }
+        const loginPane = document.getElementById("auth-gate-login-pane");
+        const regPane = document.getElementById("auth-gate-register-pane");
+        const robotPane = document.getElementById("auth-gate-robot-pane");
+        const loginBtn = document.getElementById("auth-gate-tab-login-btn");
+        const regBtn = document.getElementById("auth-gate-tab-register-btn");
+        const tabNav = document.querySelector(".auth-gate-tab-nav");
+        if (loginPane) { loginPane.style.display = "none"; loginPane.classList.remove("active"); }
+        if (regPane) { regPane.style.display = "none"; regPane.classList.remove("active"); }
+        if (robotPane) { robotPane.style.display = "none"; robotPane.classList.remove("active"); }
+        if (tab === "login") {
+          if (tabNav) tabNav.style.display = "grid";
+          if (loginBtn) loginBtn.classList.add("active");
+          if (regBtn) regBtn.classList.remove("active");
+          if (loginPane) { loginPane.style.display = "block"; loginPane.classList.add("active"); }
+        } else if (tab === "register") {
+          if (tabNav) tabNav.style.display = "grid";
+          if (regBtn) regBtn.classList.add("active");
+          if (loginBtn) loginBtn.classList.remove("active");
+          if (regPane) { regPane.style.display = "block"; regPane.classList.add("active"); }
+        } else if (tab === "robot") {
+          if (tabNav) tabNav.style.display = "none";
+          if (robotPane) { robotPane.style.display = "block"; robotPane.classList.add("active"); }
+        }
+      };
+
+      window.submitAuthGateRegister = window.submitAuthGateRegister || function (e) {
+        if (e && e.preventDefault) e.preventDefault();
+        if (window.GeoAuthGateModule && typeof window.GeoAuthGateModule.submitAuthGateRegister === "function") {
+          return window.GeoAuthGateModule.submitAuthGateRegister(e);
+        }
+      };
+
+      window.submitAuthGateLogin = window.submitAuthGateLogin || function (e) {
+        if (e && e.preventDefault) e.preventDefault();
+        if (window.GeoAuthGateModule && typeof window.GeoAuthGateModule.submitAuthGateLogin === "function") {
+          return window.GeoAuthGateModule.submitAuthGateLogin(e);
+        }
+      };
+
+      window.handleRobotVerificationChoice = window.handleRobotVerificationChoice || function (choice) {
+        if (window.GeoAuthGateModule && typeof window.GeoAuthGateModule.handleRobotVerificationChoice === "function") {
+          return window.GeoAuthGateModule.handleRobotVerificationChoice(choice);
+        }
+      };
+
+      window.cancelGateRobotVerification = window.cancelGateRobotVerification || function () {
+        if (window.GeoAuthGateModule && typeof window.GeoAuthGateModule.cancelGateRobotVerification === "function") {
+          return window.GeoAuthGateModule.cancelGateRobotVerification();
+        }
+        window.switchAuthGateTab("register");
+      };
+
+      window.cancelRobotVerification = window.cancelRobotVerification || function () {
+        if (window.GeoAuthGateModule && typeof window.GeoAuthGateModule.cancelRobotVerification === "function") {
+          return window.GeoAuthGateModule.cancelRobotVerification();
+        }
+        window.switchAuthGateTab("register");
+      };
+    })();
+  </script>
+
+  <div id="auth-gate-overlay" class="auth-gate-screen">
+    <div class="auth-gate-card">
+      <!-- Brand & Icon Header -->
+      <div class="auth-gate-brand-badge">
+        <img src="assets/logo.png" alt="High School Help Kit" class="auth-gate-brand-logo">
+        <span class="auth-gate-brand-text">Geography Edu • High School Help Kit</span>
+      </div>
+
+      <div class="auth-gate-welcome-tag" data-i18n="authGateWelcomeBadge">HỆ THỐNG HỌC TẬP ĐỊA LÝ 4.0</div>
+
+      <h1 class="auth-gate-title" data-i18n="authGateTitle">Yêu Cầu Đăng Nhập Để Tiếp Tục</h1>
+      <p class="auth-gate-subtitle" data-i18n="authGateSubtitle">
+        Vui lòng đăng nhập hoặc tạo tài khoản để truy cập đầy đủ kho tài liệu học tập, bài viết học thuật và Trợ lý AI
+        Địa lý.
+      </p>
+
+      <!-- Tab Switcher (Login / Register) -->
+      <div class="auth-gate-tab-nav">
+        <button type="button" class="auth-gate-tab-btn active" id="auth-gate-tab-login-btn"
+          onclick="switchAuthGateTab('login')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+            <polyline points="10 17 15 12 10 7"></polyline>
+            <line x1="15" y1="12" x2="3" y2="12"></line>
+          </svg>
+          <span data-i18n="authGateTabLogin">Đăng Nhập</span>
+        </button>
+        <button type="button" class="auth-gate-tab-btn" id="auth-gate-tab-register-btn"
+          onclick="switchAuthGateTab('register')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+            <circle cx="8.5" cy="7" r="4"></circle>
+            <line x1="20" y1="8" x2="20" y2="14"></line>
+            <line x1="23" y1="11" x2="17" y2="11"></line>
+          </svg>
+          <span data-i18n="authGateTabRegister">Đăng Ký Tài Khoản</span>
+        </button>
+      </div>
+
+      <!-- 1. LOGIN PANE -->
+      <div class="auth-gate-pane active" id="auth-gate-login-pane">
+        <form id="form-auth-gate-login" onsubmit="event.preventDefault(); return (window.submitAuthGateLogin ? submitAuthGateLogin(event) : false);">
+          <div class="form-group">
+            <label class="form-label" for="gate-login-email" data-i18n="gmailLabel">Địa chỉ Gmail *</label>
+            <div class="auth-input-wrapper">
+              <span class="auth-input-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                  <polyline points="22,6 12,13 2,6"></polyline>
+                </svg>
+              </span>
+              <input type="email" id="gate-login-email" class="form-control auth-control"
+                placeholder="Nhập địa chỉ Gmail của bạn" required autocomplete="email">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="gate-login-password" data-i18n="passwordLabel">Mật khẩu *</label>
+            <div class="password-input-wrap">
+              <span class="auth-input-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+              </span>
+              <input type="password" id="gate-login-password" class="form-control auth-control"
+                placeholder="Nhập mật khẩu của bạn" required autocomplete="current-password">
+              <button type="button" class="password-toggle-btn" data-target="gate-login-password" title="Hiện mật khẩu"
+                onclick="togglePasswordVisibility('gate-login-password', this, event)">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path
+                    d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24">
+                  </path>
+                  <line x1="1" y1="1" x2="23" y2="23"></line>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-auth-submit" id="btn-gate-login-submit">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+              <polyline points="10 17 15 12 10 7"></polyline>
+              <line x1="15" y1="12" x2="3" y2="12"></line>
+            </svg>
+            <span data-i18n="btnLoginSubmit">Đăng Nhập Vào Hệ Thống</span>
+          </button>
+        </form>
+
+        <div class="auth-divider"><span data-i18n="btnOr">hoặc</span></div>
+
+        <div class="google-signin-wrap">
+          <button type="button" class="btn btn-google btn-auth-google" onclick="handleGoogleLoginGate()">
+            <svg width="20" height="20" viewBox="0 0 48 48">
+              <path fill="#EA4335"
+                d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z" />
+              <path fill="#4285F4"
+                d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z" />
+              <path fill="#FBBC05"
+                d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z" />
+              <path fill="#34A853"
+                d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z" />
+            </svg>
+            <span data-i18n="authGateGoogleBtn">Đăng nhập nhanh với Google</span>
+          </button>
+        </div>
+
+        <div class="auth-gate-footer-hint">
+          <span data-i18n="authGateNoAccount">Chưa có tài khoản?</span>
+          <button type="button" class="btn-link-action" onclick="switchAuthGateTab('register')"
+            data-i18n="authGateSwitchToReg">Đăng ký thành viên ngay</button>
+        </div>
+      </div>
+
+      <!-- 2. REGISTER PANE -->
+      <div class="auth-gate-pane" id="auth-gate-register-pane" style="display: none;">
+        <form id="form-auth-gate-register" onsubmit="event.preventDefault(); return (window.submitAuthGateRegister ? submitAuthGateRegister(event) : false);">
+          <div class="form-group">
+            <label class="form-label" for="gate-reg-fullname" data-i18n="fullNameLabel">Họ và tên *</label>
+            <div class="auth-input-wrapper">
+              <span class="auth-input-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+              </span>
+              <input type="text" id="gate-reg-fullname" class="form-control auth-control"
+                placeholder="Ví dụ: Trần Hoàng Long" required autocomplete="name">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="gate-reg-email" data-i18n="gmailLabel">Địa chỉ Gmail *</label>
+            <div class="auth-input-wrapper">
+              <span class="auth-input-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                  <polyline points="22,6 12,13 2,6"></polyline>
+                </svg>
+              </span>
+              <input type="email" id="gate-reg-email" class="form-control auth-control"
+                placeholder="Ví dụ: hoanglong@gmail.com" required autocomplete="email">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="gate-reg-password" data-i18n="passwordLabel">Mật khẩu *</label>
+            <div class="password-input-wrap">
+              <span class="auth-input-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+              </span>
+              <input type="password" id="gate-reg-password" class="form-control auth-control"
+                placeholder="Tối thiểu 6 ký tự" minlength="6" required autocomplete="new-password">
+              <button type="button" class="password-toggle-btn" data-target="gate-reg-password" title="Hiện mật khẩu"
+                onclick="togglePasswordVisibility('gate-reg-password', this, event)">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path
+                    d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24">
+                  </path>
+                  <line x1="1" y1="1" x2="23" y2="23"></line>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="gate-reg-usertype" data-i18n="userTypeLabel">Đối tượng tham gia *</label>
+            <div class="auth-input-wrapper">
+              <span class="auth-input-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="9" cy="7" r="4"></circle>
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+              </span>
+              <select id="gate-reg-usertype" class="form-control auth-control" required>
+                <option value="Học sinh THCS">Học sinh THCS</option>
+                <option value="Phụ huynh">Phụ huynh</option>
+                <option value="Khác">Khác (Giáo viên, Học sinh THPT, Sinh viên...)</option>
+              </select>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-auth-submit" id="btn-gate-register-submit">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="8.5" cy="7" r="4"></circle>
+              <polyline points="17 11 19 13 23 9"></polyline>
+            </svg>
+            <span data-i18n="btnFinishReg">Hoàn tất Đăng Ký Tài Khoản</span>
+          </button>
+        </form>
+
+        <div class="auth-divider"><span data-i18n="btnOr">hoặc</span></div>
+
+        <div class="google-signin-wrap">
+          <button type="button" class="btn btn-google btn-auth-google" onclick="handleGoogleLoginGate()">
+            <svg width="20" height="20" viewBox="0 0 48 48">
+              <path fill="#EA4335"
+                d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z" />
+              <path fill="#4285F4"
+                d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z" />
+              <path fill="#FBBC05"
+                d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z" />
+              <path fill="#34A853"
+                d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z" />
+            </svg>
+            <span data-i18n="authGateGoogleRegBtn">Đăng ký nhanh với Google</span>
+          </button>
+        </div>
+
+        <div class="auth-gate-footer-hint">
+          <span data-i18n="authGateHasAccount">Đã có tài khoản?</span>
+          <button type="button" class="btn-link-action" onclick="switchAuthGateTab('login')"
+            data-i18n="authGateSwitchToLogin">Đăng nhập ngay</button>
+        </div>
+      </div>
+
+      <!-- 3. ROBOT VERIFICATION PANE (Directly on Auth Gate) -->
+      <div class="auth-gate-pane" id="auth-gate-robot-pane" style="display: none;">
+        <div class="auth-gate-robot-header" style="text-align: center; margin-bottom: 12px;">
+          <div class="robot-verify-badge"
+            style="display: inline-flex; align-items: center; gap: 6px; background: rgba(13, 148, 136, 0.2); border: 1px solid rgba(45, 212, 191, 0.4); color: #5eead4; font-size: 0.72rem; font-weight: 800; padding: 4px 14px; border-radius: 999px; margin-bottom: 10px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+            <span>BƯỚC XÁC THỰC BẢO MẬT</span>
+          </div>
+          <h2 class="auth-gate-robot-title" style="font-size: 1.32rem; font-weight: 800; margin-bottom: 6px;">Bạn có phải là robot không?</h2>
+          <p class="auth-gate-robot-desc" style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.5; max-width: 420px; margin: 0 auto;">
+            Để bảo vệ hệ thống và đảm bảo bạn là người thật, vui lòng chọn câu trả lời chính xác dưới đây:
+          </p>
+        </div>
+
+        <!-- 3 Interactive Choice Buttons: Có, Không, Chắc chắn có -->
+        <div class="robot-choice-grid">
+          <button type="button" class="robot-choice-btn choice-robot" id="btn-robot-answer-yes" onclick="handleRobotVerificationChoice('yes')" title="Chọn: Có (Tôi là Robot)">
+            <span class="robot-choice-icon">🤖</span>
+            <span class="robot-choice-label">Có</span>
+            <span class="robot-choice-sub">Tôi là Robot</span>
+          </button>
+
+          <button type="button" class="robot-choice-btn choice-human" id="btn-robot-answer-no" onclick="handleRobotVerificationChoice('no')" title="Chọn: Không (Tôi là con người)">
+            <span class="robot-choice-icon">👤</span>
+            <span class="robot-choice-label">Không</span>
+            <span class="robot-choice-sub">Tôi là con người</span>
+          </button>
+
+          <button type="button" class="robot-choice-btn choice-robot" id="btn-robot-answer-definitely" onclick="handleRobotVerificationChoice('definitely_yes')" title="Chọn: Chắc chắn có">
+            <span class="robot-choice-icon">🦾</span>
+            <span class="robot-choice-label">Chắc chắn có</span>
+            <span class="robot-choice-sub">Chắc chắn là Robot</span>
+          </button>
+        </div>
+
+        <div style="margin-top: 16px; text-align: center;">
+          <button type="button" class="btn btn-secondary" style="width: 100%; padding: 11px 16px; border-radius: 12px; font-weight: 600;"
+            onclick="cancelGateRobotVerification()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: inline-block; vertical-align: -2px; margin-right: 4px;">
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            Quay lại sửa thông tin
+          </button>
+        </div>
+      </div>
+
+      <!-- Quick Language Selector on Auth Gate Card -->
+      <div class="auth-gate-lang-selector">
+        <span class="auth-gate-lang-label">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="2" y1="12" x2="22" y2="12"></line>
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+          </svg>
+          Language / Ngôn ngữ:
+        </span>
+        <div class="auth-gate-lang-buttons">
+          <button type="button" class="btn-gate-lang" onclick="selectLanguage('vi')">VI</button>
+          <button type="button" class="btn-gate-lang" onclick="selectLanguage('en')">EN</button>
+          <button type="button" class="btn-gate-lang" onclick="selectLanguage('zh')">ZH</button>
+          <button type="button" class="btn-gate-lang" onclick="selectLanguage('ja')">JA</button>
+          <button type="button" class="btn-gate-lang" onclick="selectLanguage('ko')">KO</button>
+          <button type="button" class="btn-gate-lang" onclick="selectLanguage('ru')">RU</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Full-screen Maintenance Screen for All Regular Users & Guests (Except Super Admin) -->
+  <div id="full-maintenance-overlay" class="full-maintenance-screen" style="display: none;">
+    <div class="maint-overlay-card">
+      <div class="maint-icon-container">
+        <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="1.8">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path
+            d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+          </path>
+        </svg>
+      </div>
+
+      <div class="maint-brand-badge">
+        <img src="assets/logo.png" alt="High School Help Kit" class="maint-brand-logo">
+        <span>Geography Edu • High School Help Kit</span>
+      </div>
+
+      <h1 class="maint-main-title" data-i18n="maintScreenTitle">HỆ THỐNG ĐANG BẢO TRÌ NÂNG CẤP</h1>
+
+      <div class="maint-apology-box">
+        <div class="maint-apology-badge" data-i18n="maintApologyBadge">THÔNG BÁO TỪ BAN QUẢN TRỊ</div>
+        <p class="maint-apology-text" data-i18n="maintApologyText">
+          Kính gửi quý thầy cô, các bậc phụ huynh và các bạn học sinh thân mến,<br>
+          Hệ thống <strong>Geography Edu - High School Help Kit</strong> hiện đang tạm dừng phục vụ để bảo trì định kỳ,
+          nâng cấp máy chủ và tối ưu hóa hệ thống dữ liệu học tập.
+        </p>
+        <p class="maint-apology-highlight" data-i18n="maintApologyHighlight">
+          <strong>Ban Quản Trị thành thật xin lỗi vì sự bất tiện này!</strong> Chúng tôi đang nỗ lực hết sức để hoàn tất
+          công việc sớm nhất và mở lại toàn bộ hệ thống ngay khi sẵn sàng.
+        </p>
+      </div>
+
+      <div class="maint-info-grid">
+        <div class="maint-info-item">
+          <div>
+            <strong data-i18n="maintStatusLabel">Trạng thái</strong>
+            <p data-i18n="maintStatusVal">Đang nâng cấp máy chủ & dữ liệu</p>
+          </div>
+        </div>
+        <div class="maint-info-item">
+          <div>
+            <strong data-i18n="maintTimeLabel">Thời gian dự kiến</strong>
+            <p data-i18n="maintTimeVal">Sẽ mở lại trong thời gian sớm nhất</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Khối Trải nghiệm Mini-Game Khủng Long khi Website bảo trì -->
+      <div class="maint-game-box"
+        style="margin-bottom: 20px; padding: 16px 20px; background: linear-gradient(135deg, rgba(13, 148, 136, 0.08), rgba(5, 150, 105, 0.12)); border: 1.5px dashed rgba(13, 148, 136, 0.35); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px;">
+        <div style="text-align: left; display: flex; align-items: center; gap: 12px;">
+          <div style="width: 44px; height: 44px; border-radius: 10px; background: linear-gradient(135deg, #0d9488, #059669); color: white; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+          </div>
+          <div>
+            <div style="font-weight: 700; color: #0f766e; font-size: 0.95rem;" data-i18n="maintGameBoxTitle">Giải trí trong lúc chờ bảo trì</div>
+            <div style="font-size: 0.82rem; color: #475569;" data-i18n="maintGameBoxDesc">Trò chơi 2D Khủng Long vượt chướng ngại vật</div>
+          </div>
+        </div>
+        <button type="button" class="btn btn-primary" id="btn-maint-dino-game" onclick="openDinoGameModal()"
+          style="font-weight: 700; background: linear-gradient(135deg, #0d9488, #059669); border: none; box-shadow: 0 4px 14px rgba(13, 148, 136, 0.3); padding: 9px 20px; border-radius: 8px; display: inline-flex; align-items: center; gap: 8px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+          </svg>
+          <span data-i18n="maintBtnPlayDino">Trải nghiệm</span>
+        </button>
+      </div>
+
+      <!-- Quick Language Selector on Maintenance Card -->
+      <div class="maint-lang-selector"
+        style="display: flex; justify-content: center; align-items: center; gap: 6px; flex-wrap: wrap; margin-top: 18px; padding-top: 16px; border-top: 1px dashed rgba(0,0,0,0.1);">
+        <button class="btn btn-sm btn-outline-secondary"
+          style="padding: 4px 10px; font-size: 0.76rem; font-weight: 700;" onclick="selectLanguage('vi')">VI</button>
+        <button class="btn btn-sm btn-outline-secondary"
+          style="padding: 4px 10px; font-size: 0.76rem; font-weight: 700;" onclick="selectLanguage('en')">EN</button>
+        <button class="btn btn-sm btn-outline-secondary"
+          style="padding: 4px 10px; font-size: 0.76rem; font-weight: 700;" onclick="selectLanguage('zh')">ZH</button>
+        <button class="btn btn-sm btn-outline-secondary"
+          style="padding: 4px 10px; font-size: 0.76rem; font-weight: 700;" onclick="selectLanguage('ja')">JA</button>
+        <button class="btn btn-sm btn-outline-secondary"
+          style="padding: 4px 10px; font-size: 0.76rem; font-weight: 700;" onclick="selectLanguage('ko')">KO</button>
+        <button class="btn btn-sm btn-outline-secondary"
+          style="padding: 4px 10px; font-size: 0.76rem; font-weight: 700;" onclick="selectLanguage('ru')">RU</button>
+      </div>
+
+      <!-- Troubleshoot Portal trigger on Maintenance Overlay -->
+      <div
+        style="margin-top: 20px; padding-top: 16px; border-top: 1px dashed rgba(217, 119, 6, 0.25); text-align: center;">
+        <button type="button" class="btn btn-sm btn-outline-warning" id="btn-maint-troubleshoot"
+          style="font-weight: 700; font-size: 0.82rem; border-radius: 999px; padding: 6px 18px; display: inline-flex; align-items: center; gap: 6px;"
+          onclick="openMaintenanceTroubleshootModal()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+          </svg>
+          <span data-i18n="maintBtnTroubleshoot">Khắc Phục Sự Cố</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Maintenance Sticky Alert Banner (for Super Admins) -->
+  <div id="maintenance-banner" class="maintenance-top-banner" style="display: none;">
+    <div class="container maintenance-banner-inner">
+      <div class="maintenance-banner-content">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+          <line x1="12" y1="9" x2="12" y2="13"></line>
+          <line x1="12" y1="17" x2="12.01" y2="17"></line>
+        </svg>
+        <div>
+          <strong data-i18n="maintBannerTitle">HỆ THỐNG ĐANG TRONG CHẾ ĐỘ BẢO TRÌ</strong>
+          <span class="maintenance-desc-text" data-i18n="maintBannerDesc">
+            - Màn hình thông báo bảo trì & lời xin lỗi đang hiển thị cho tất cả thành viên.
+          </span>
+        </div>
+      </div>
+      <div id="maintenance-banner-action">
+        <!-- Rendered dynamically for authorized admins: Nút Tắt Bảo Trì Nhanh -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Site Header -->

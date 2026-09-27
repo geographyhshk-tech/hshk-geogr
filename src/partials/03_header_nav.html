@@ -1,0 +1,321 @@
+  <header class="site-header" id="site-header">
+    <div class="container header-inner">
+      <!-- Brand Logo -->
+      <a class="brand-logo" onclick="switchTab('home')" title="Geography Edu">
+        <div class="brand-icon-wrapper">
+          <img src="assets/logo.png" alt="High School Help Kit" class="brand-logo-img">
+        </div>
+        <div class="brand-text">
+          <span class="brand-title">Geography <span>Edu</span></span>
+          <span class="brand-subtitle">High School Help Kit</span>
+        </div>
+      </a>
+
+      <!-- Navigation Menu -->
+      <nav class="main-nav" id="main-nav">
+        <ul class="nav-menu" id="nav-menu">
+          <li>
+            <a class="nav-link active" data-tab="home" href="javascript:void(0)" onclick="switchTab('home')">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+              </svg>
+              <span data-i18n="navHome">Trang chủ</span>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" data-tab="documents" href="javascript:void(0)" onclick="switchTab('documents')">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+              </svg>
+              <span data-i18n="navDocs">Tài liệu</span>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link" data-tab="contact" href="javascript:void(0)" onclick="switchTab('contact')">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path
+                  d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z">
+                </path>
+              </svg>
+              <span data-i18n="navContact">Liên hệ</span>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link ai-nav-link" data-tab="ai-chat" href="javascript:void(0)" onclick="switchTab('ai-chat')">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M8 12h.01M12 12h.01M16 12h.01"></path>
+              </svg>
+              <span data-i18n="navAi">Trợ lí AI</span>
+              <span class="ai-nav-badge">AI</span>
+            </a>
+          </li>
+          <li>
+            <a class="nav-link globe-nav-link" data-tab="globe" href="javascript:void(0)" onclick="switchTab('globe')">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="2" y1="12" x2="22" y2="12"></line>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+              </svg>
+              <span data-i18n="navGlobe">Địa Cầu 3D</span>
+              <span class="globe-nav-badge">3D</span>
+            </a>
+          </li>
+          <li id="nav-link-admin" style="display: none;">
+            <a class="nav-link" data-tab="admin-panel" style="color: #b45309;" href="javascript:void(0)" onclick="switchTab('admin-panel')">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="7"></rect>
+                <rect x="14" y="3" width="7" height="7"></rect>
+                <rect x="14" y="14" width="7" height="7"></rect>
+                <rect x="3" y="14" width="7" height="7"></rect>
+              </svg>
+              <span data-i18n="navAdmin">Quản trị Admin</span>
+            </a>
+          </li>
+
+          <!-- Mobile Drawer Footer Actions -->
+          <li class="nav-menu-mobile-extra">
+            <div class="nav-mobile-divider"></div>
+            <div class="nav-mobile-auth-section" id="nav-mobile-auth-section">
+              <div id="nav-mobile-guest-actions" style="display: flex; gap: 8px; width: 100%;">
+                <button type="button" class="btn btn-secondary btn-sm" style="flex: 1;"
+                  onclick="openModal('modal-login'); closeMobileNav();" data-i18n="login">Đăng nhập</button>
+                <button type="button" class="btn btn-primary btn-sm" style="flex: 1;"
+                  onclick="openModal('modal-register'); closeMobileNav();" data-i18n="register">Đăng ký</button>
+              </div>
+              <div id="nav-mobile-user-actions" style="display: none; flex-direction: column; gap: 8px; width: 100%;">
+                <div class="nav-mobile-user-card" onclick="openChangePasswordModal(); closeMobileNav();">
+                  <div class="user-avatar" id="nav-mobile-user-avatar">A</div>
+                  <div class="user-info">
+                    <span class="user-name" id="nav-mobile-user-name">Người dùng</span>
+                    <span class="user-role-label" id="nav-mobile-user-role">Học sinh THCS</span>
+                  </div>
+                </div>
+                <div style="display: flex; gap: 8px;">
+                  <button type="button" class="btn btn-secondary btn-sm" style="flex: 1;"
+                    onclick="openChangePasswordModal(); closeMobileNav();">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                      <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                    <span data-i18n="changePwd">Đổi mật khẩu</span>
+                  </button>
+                  <button type="button" class="btn btn-danger btn-sm" style="flex: 1;"
+                    onclick="window.geoAuth.logout(); showToast(t('logoutSuccess', 'Đã đăng xuất!'), 'info'); closeMobileNav();">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                      <polyline points="16 17 21 12 16 7"></polyline>
+                      <line x1="21" y1="12" x2="9" y2="12"></line>
+                    </svg>
+                    <span data-i18n="logout">Đăng xuất</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- Auth Header Actions & Language Selector -->
+      <div class="header-actions">
+        <!-- Language Selector Dropdown -->
+        <div class="lang-selector-dropdown" id="lang-selector-dropdown">
+          <button class="btn-lang-toggle" id="btn-lang-toggle" type="button" aria-label="Chọn ngôn ngữ"
+            onclick="toggleLanguageDropdown(event)">
+            <span class="lang-flag" id="current-lang-flag">VI</span>
+            <span class="lang-name" id="current-lang-name" style="display: none;">Tiếng Việt</span>
+            <svg class="lang-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2.5">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+          <div class="lang-menu" id="lang-menu">
+            <button class="lang-option-item active" data-lang="vi" onclick="selectLanguage('vi')">
+              <span class="lang-opt-flag">VI</span>
+              <span class="lang-opt-name">Tiếng Việt</span>
+            </button>
+            <button class="lang-option-item" data-lang="en" onclick="selectLanguage('en')">
+              <span class="lang-opt-flag">EN</span>
+              <span class="lang-opt-name">English</span>
+            </button>
+            <button class="lang-option-item" data-lang="zh" onclick="selectLanguage('zh')">
+              <span class="lang-opt-flag">ZH</span>
+              <span class="lang-opt-name">中文 (简体)</span>
+            </button>
+            <button class="lang-option-item" data-lang="ja" onclick="selectLanguage('ja')">
+              <span class="lang-opt-flag">JA</span>
+              <span class="lang-opt-name">日本語</span>
+            </button>
+            <button class="lang-option-item" data-lang="ko" onclick="selectLanguage('ko')">
+              <span class="lang-opt-flag">KO</span>
+              <span class="lang-opt-name">한국어</span>
+            </button>
+            <button class="lang-option-item" data-lang="ru" onclick="selectLanguage('ru')">
+              <span class="lang-opt-flag">RU</span>
+              <span class="lang-opt-name">Русский</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Dark / Night Mode Toggle Button -->
+        <button type="button" class="btn-theme-toggle" id="btn-theme-toggle" onclick="toggleTheme()"
+          title="Chuyển đổi Chế độ ban đêm / Ban ngày" aria-label="Chế độ ban đêm">
+          <svg class="theme-icon-moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+          <svg class="theme-icon-sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+        </button>
+
+        <!-- PWA Install App Button -->
+        <button type="button" id="btn-pwa-install" class="btn btn-sm btn-outline-primary"
+          style="display: none; align-items: center; gap: 6px;" title="Cài đặt ứng dụng lên thiết bị">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          <span>Cài App</span>
+        </button>
+
+        <!-- Guest Box -->
+        <div id="auth-guest-box" style="display: flex; gap: 8px;">
+          <button class="btn btn-sm btn-secondary" data-i18n="login" onclick="openModal('modal-login')">Đăng
+            nhập</button>
+          <button class="btn btn-sm btn-primary" data-i18n="register" onclick="openModal('modal-register')">Đăng
+            ký</button>
+        </div>
+
+        <!-- Logged-in User Box -->
+        <div id="auth-user-box" style="display: none; align-items: center; gap: 8px;">
+          <div class="user-profile-badge" title="Nhấn để đổi mật khẩu hoặc xem thông tin tài khoản"
+            onclick="openChangePasswordModal()">
+            <div class="user-avatar" id="auth-user-avatar">A</div>
+            <div class="user-info">
+              <span class="user-name" id="auth-user-name">Người dùng</span>
+              <span class="user-role-label" id="auth-user-role">Học sinh THCS</span>
+            </div>
+          </div>
+          <button class="btn btn-sm btn-secondary header-user-action-btn" data-i18n-title="changePwd"
+            title="Đổi mật khẩu tài khoản" onclick="openChangePasswordModal()">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+          </button>
+          <button class="btn btn-sm btn-secondary header-user-action-btn" data-i18n-title="logout" title="Đăng xuất"
+            onclick="window.geoAuth.logout(); showToast(t('logoutSuccess', 'Đã đăng xuất!'), 'info');">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+              <polyline points="16 17 21 12 16 7"></polyline>
+              <line x1="21" y1="12" x2="9" y2="12"></line>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Mobile Menu Toggle Button -->
+        <button class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Menu" aria-expanded="false" title="Menu"
+          onclick="toggleMobileNav(event)">
+          <span class="hamburger-bar bar-1"></span>
+          <span class="hamburger-bar bar-2"></span>
+          <span class="hamburger-bar bar-3"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Backdrop Overlay -->
+  <div class="mobile-nav-backdrop" id="mobile-nav-backdrop" onclick="closeMobileNav()"></div>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-pattern"></div>
+    <div class="hero-glow-1"></div>
+    <div class="hero-glow-2"></div>
+    <div class="container hero-content">
+      <div class="hero-tag">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <polygon
+            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+          </polygon>
+        </svg>
+        <span data-i18n="heroBadge">High School Help Kit</span>
+      </div>
+      <h1 class="hero-title" data-i18n-html="heroTitleFull">
+        Nền Tảng Lưu Trữ & Học Tập
+      </h1>
+      <p class="hero-desc" data-i18n-html="heroDesc">
+        Hệ thống tài liệu chuẩn hoá <strong>Địa lí đại cương</strong> & <strong>Địa lí Việt Nam</strong>. Phân chia rõ
+        ràng giữa Địa lí Tự nhiên và Kinh tế - Xã hội.
+      </p>
+
+      <div class="hero-cta-group">
+        <button class="btn btn-lg btn-primary" onclick="switchTab('documents')">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+          </svg>
+          <span data-i18n="btnExploreDocs">Khám phá Kho Tài Liệu</span>
+        </button>
+        <button class="btn btn-lg btn-secondary"
+          onclick="switchTab('home'); document.getElementById('section-group-posts').scrollIntoView({behavior: 'smooth'});">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+            <circle cx="9" cy="7" r="4"></circle>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+          </svg>
+          <span data-i18n="btnSavedDocs">Cộng Đồng Group Địa Lí</span>
+        </button>
+        <button class="btn btn-lg btn-outline-primary"
+          onclick="switchTab('documents'); setTimeout(() => { document.getElementById('exam-hub-section')?.scrollIntoView({behavior: 'smooth'}); document.getElementById('exam-code-input')?.focus(); }, 150);">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <path d="M9 12l2 2 4-4"/>
+          </svg>
+          <span>Thi Online &amp; Khảo Sát</span>
+        </button>
+      </div>
+
+      <!-- Quick Stats -->
+      <div class="hero-stats">
+        <div class="stat-item">
+          <div class="stat-num" id="stat-total-docs">8+</div>
+          <div class="stat-label" data-i18n="statDocs">Tài liệu phân loại</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">100%</div>
+          <div class="stat-label" data-i18n="statStandard">Chuẩn chương trình mới</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num" id="stat-total-downloads">12,500+</div>
+          <div class="stat-label" data-i18n="statDownloads">Lượt xem & Tải về</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num" id="stat-total-users">2,000+</div>
+          <div class="stat-label" data-i18n="statUsers">Học sinh & Phụ huynh</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main View Container (Single Page Application Tabs) -->
+  <main class="main-view-container">
+    <div class="container">
+
+      <!-- ====================================================================
+      TAB 1: TRANG CHỦ (HOME)
+      ==================================================================== -->

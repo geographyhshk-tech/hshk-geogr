@@ -1,0 +1,105 @@
+      <div class="tab-view" id="tab-view-ai-chat">
+        <div class="ai-chat-layout">
+
+          <!-- LEFT SIDEBAR: Danh sách phiên chat -->
+          <aside class="ai-sidebar" id="ai-sidebar">
+            <div class="ai-sidebar-header">
+              <div class="ai-sidebar-logo">
+                <div class="ai-sidebar-logo-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="M8 12h.01M12 12h.01M16 12h.01"></path>
+                  </svg>
+                </div>
+                <span data-i18n="aiAssistantTitle">Trợ Lý AI</span>
+              </div>
+              <button class="ai-new-chat-btn" id="ai-new-chat-btn" data-i18n-title="aiNewChatBtn"
+                title="Cuộc trò chuyện mới">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                <span data-i18n="aiNewChatBtn">Mới</span>
+              </button>
+            </div>
+
+            <div class="ai-sidebar-label" data-i18n="aiSidebarTitle">Lịch sử trò chuyện</div>
+            <div class="ai-sessions-list" id="ai-sessions-list">
+              <!-- Rendered by ai-chat.js -->
+            </div>
+
+            <div class="ai-sidebar-footer">
+              <div class="ai-sidebar-model-badge">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                </svg>
+                Google Gemini 1.5 Pro
+              </div>
+            </div>
+          </aside>
+
+          <!-- MAIN CHAT AREA -->
+          <main class="ai-chat-main">
+
+            <!-- Chat Header -->
+            <div class="ai-chat-header">
+              <button class="ai-sidebar-toggle btn-icon" id="ai-sidebar-toggle" title="Mở/đóng danh sách chat">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="3" y1="12" x2="21" y2="12"></line>
+                  <line x1="3" y1="6" x2="21" y2="6"></line>
+                  <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+              </button>
+              <div class="ai-chat-header-info">
+                <div class="ai-chat-header-title">
+                  <div class="ai-status-dot"></div>
+                  <span data-i18n="aiAssistantTitle">Trợ Lý Địa Lí AI</span>
+                </div>
+                <div class="ai-chat-header-sub" data-i18n="aiAssistantSub">Geography Edu • Powered by Google Gemini
+                </div>
+              </div>
+              <button class="btn btn-sm btn-outline-primary" onclick="aiNewSession()" style="flex-shrink:0;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                <span data-i18n="aiNewChatBtn">Chat mới</span>
+              </button>
+            </div>
+
+            <!-- Messages Area -->
+            <div class="ai-messages-container" id="ai-messages-container">
+              <!-- Rendered by ai-chat.js -->
+            </div>
+
+            <!-- Input Area -->
+            <div class="ai-input-area">
+              <div class="ai-input-box">
+                <textarea id="ai-chat-input" class="ai-textarea" data-i18n-placeholder="aiInputPlaceholder"
+                  placeholder="Hỏi bất kỳ điều gì về Địa lí, ôn thi, bản đồ Atlat... (Enter để gửi, Shift+Enter xuống dòng)"
+                  rows="1"></textarea>
+                <button class="ai-send-btn" id="ai-send-btn" data-i18n-title="aiSendTitle" title="Gửi (Enter)">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                  </svg>
+                </button>
+              </div>
+              <div class="ai-input-hint" data-i18n="aiDisclaimer">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" y1="8" x2="12" y2="12"></line>
+                  <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+                Trả lời có thể sai, hãy kiểm tra thông tin quan trọng. Lịch sử chat được lưu ngay trên trình duyệt của
+                bạn.
+              </div>
+            </div>
+
+          </main>
+        </div>
+      </div>
+
+      <!-- ====================================================================
+      TAB 5: QUẢN TRỊ ADMIN (ADMIN CONTROL PANEL)
+      ==================================================================== -->

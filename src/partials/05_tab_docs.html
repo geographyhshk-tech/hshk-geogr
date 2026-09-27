@@ -1,0 +1,242 @@
+      <div class="tab-view" id="tab-view-documents">
+        <div class="section-header">
+          <div class="section-title-wrap">
+            <h2 class="section-title">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+              </svg>
+              <span data-i18n="secDocsTitle">Kho Tài Liệu Địa Lí Chuyên Biệt</span>
+            </h2>
+            <p class="section-subtitle" data-i18n="secDocsDesc">Khám phá và lưu trữ tài liệu phân loại chuẩn 4 nhóm kiến
+              thức cốt lõi</p>
+          </div>
+
+          <!-- Document Section Actions: Exam Hub, Saved Docs & Admin Add Doc -->
+          <div class="section-header-actions" style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+            <button type="button" class="btn btn-outline-primary" onclick="document.getElementById('exam-hub-section')?.scrollIntoView({behavior: 'smooth'}); document.getElementById('exam-code-input')?.focus();" title="Chuyển nhanh tới Phòng thi &amp; Khảo sát trực tuyến">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                <path d="M9 12l2 2 4-4"/>
+              </svg>
+              <span data-i18n="navOnlineExam">Phòng Thi Online</span>
+            </button>
+            <button type="button" class="btn btn-secondary" id="btn-docs-saved-collection" onclick="switchTab('saved')" title="Xem bộ sưu tập tài liệu bạn đã lưu">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+              </svg>
+              <span data-i18n="navSaved">Tài liệu đã lưu</span>
+              <span class="badge-counter" id="saved-badge-counter" style="display: none;">0</span>
+            </button>
+
+            <!-- Admin Add Document Button -->
+            <div id="admin-add-doc-btn" style="display: none;">
+              <button class="btn btn-primary" onclick="openAddDocumentModal()">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                <span data-i18n="btnUploadDoc">Đăng Tài Liệu Mới</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Google-style Search Bar -->
+        <div class="doc-google-search-wrap">
+          <div class="doc-google-search-box">
+            <svg class="doc-search-icon-left" width="22" height="22" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2.5">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" class="doc-google-search-input" id="doc-search-input"
+              data-i18n-placeholder="searchPlaceholder" placeholder="Tìm kiếm tài liệu, chuyên đề, tác giả, khối lớp..."
+              autocomplete="off">
+            <button class="doc-search-clear-btn" id="doc-search-clear" title="Xóa tìm kiếm" style="display: none;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+            <button class="doc-search-submit-btn" id="doc-search-btn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <span data-i18n="btnSearch">Tìm kiếm</span>
+            </button>
+          </div>
+
+          <!-- Gợi ý từ khóa nhanh -->
+          <div class="doc-search-suggestions">
+            <span class="doc-search-suggest-label" data-i18n="suggestLabel">Gợi ý:</span>
+            <button class="doc-search-suggest-tag" onclick="setDocSearch('Atlat Địa lí')">Atlat Địa lí</button>
+            <button class="doc-search-suggest-tag" onclick="setDocSearch('Lớp 10')">Lớp 10</button>
+            <button class="doc-search-suggest-tag" onclick="setDocSearch('Lớp 11')">Lớp 11</button>
+            <button class="doc-search-suggest-tag" onclick="setDocSearch('Lớp 12')">Lớp 12</button>
+            <button class="doc-search-suggest-tag" onclick="setDocSearch('Tự nhiên')">Tự nhiên</button>
+            <button class="doc-search-suggest-tag" onclick="setDocSearch('Kinh tế')">Kinh tế</button>
+          </div>
+        </div>
+
+        <!-- 2-Level Filter Bar -->
+        <div class="doc-filter-bar">
+          <!-- Level 1: Main Category Tabs -->
+          <div class="category-main-tabs">
+            <button class="cat-main-btn active" data-main-cat="all">
+              <span data-i18n="catAllMain">Tất Cả Danh Mục</span>
+            </button>
+            <button class="cat-main-btn" data-main-cat="dai_cuong">
+              <span data-i18n="catDaiCuong">1. Địa Lí Đại Cương</span>
+            </button>
+            <button class="cat-main-btn" data-main-cat="viet_nam">
+              <span data-i18n="catVietNam">2. Địa Lí Việt Nam</span>
+            </button>
+            <button type="button" class="cat-main-btn cat-saved-shortcut-btn" onclick="switchTab('saved')" style="margin-left: auto; display: inline-flex; align-items: center; gap: 6px;" title="Xem các tài liệu bạn đã lưu">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+              </svg>
+              <span data-i18n="navSaved">Tài liệu đã lưu</span>
+              <span class="badge-counter saved-badge-counter" style="display: none;">0</span>
+            </button>
+          </div>
+
+          <!-- Level 2: Sub Category Tabs -->
+          <div class="category-sub-tabs">
+            <span style="font-size: 0.82rem; font-weight: 700; color: var(--text-muted); margin-right: 6px;"
+              data-i18n="catAllSub">Phân nhóm:</span>
+            <button class="cat-sub-btn active" data-sub-cat="all" data-i18n="catAllSub">Tất cả phân nhóm</button>
+            <button class="cat-sub-btn" data-sub-cat="tu_nhien" data-i18n="catTuNhien">Tự nhiên</button>
+            <button class="cat-sub-btn" data-sub-cat="kinh_te_xa_hoi" data-i18n="catKinhTe">Kinh tế - Xã hội</button>
+          </div>
+
+          <!-- Search Result Info Bar -->
+          <div id="doc-search-result-bar"
+            style="display: none; padding-top: 10px; border-top: 1px solid var(--border-color); margin-top: 12px; display: none;">
+            <span id="doc-search-result-text" style="font-size: 0.87rem; color: var(--text-muted);"></span>
+            <button onclick="clearDocSearch()"
+              style="margin-left: 10px; font-size: 0.82rem; color: var(--primary); font-weight: 600; background: none; border: none; cursor: pointer; text-decoration: underline;"
+              data-i18n="btnClearSearch">Xóa tìm kiếm</button>
+          </div>
+        </div>
+
+        <!-- Documents Toolbar (Count & Scroll View Toggle & Auto Translate) -->
+        <div class="documents-view-toolbar" id="docs-view-toolbar">
+          <div class="docs-count-pill" id="docs-count-pill">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+            </svg>
+            <span id="docs-count-text">Tất cả tài liệu</span>
+          </div>
+          <div class="docs-toolbar-actions">
+            <button class="btn btn-sm btn-outline-primary" id="btn-toggle-auto-translate"
+              onclick="toggleAutoTranslateContent()"
+              title="Tự động dịch toàn bộ tiêu đề và nội dung tài liệu sang ngôn ngữ bạn đang chọn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="2" y1="12" x2="22" y2="12"></line>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+                </path>
+              </svg>
+              <span id="auto-translate-btn-text" data-i18n="btnAutoTranslate">Dịch tự động (AI)</span>
+            </button>
+            <span class="scroll-hint-text" data-i18n="scrollHint">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 5v14M19 12l-7 7-7-7" />
+              </svg>
+              Cuộn để xem tiếp
+            </span>
+            <button class="btn btn-sm btn-view-mode" id="btn-toggle-doc-scroll"
+              onclick="toggleDocScrollMode('documents-scroll-wrapper', this)"
+              title="Chuyển đổi chế độ cuộn gọn hoặc mở rộng toàn bộ">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="15 3 21 3 21 9"></polyline>
+                <polyline points="9 21 3 21 3 15"></polyline>
+                <line x1="21" y1="3" x2="14" y2="10"></line>
+                <line x1="3" y1="21" x2="10" y2="14"></line>
+              </svg>
+              <span data-i18n="scrollModeExpand">Mở rộng toàn bộ</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Documents Scroll Wrapper (Kho tài liệu nguyên bản) -->
+        <div class="documents-scroll-wrapper" id="documents-scroll-wrapper">
+          <div class="documents-grid" id="documents-grid">
+            <!-- Rendered dynamically by js/app.js -->
+          </div>
+        </div>
+
+        <!-- ====================================================================
+        MỤC KIỂM TRA TRỰC TUYẾN (ONLINE EXAM HUB) - NẰM Ở CUỐI KHO TÀI LIỆU
+        ==================================================================== -->
+        <div class="exam-hub-section" id="exam-hub-section">
+          <div class="exam-hub-card">
+            <div class="exam-hub-header">
+              <div class="exam-hub-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                  <path d="M9 12l2 2 4-4"/>
+                </svg>
+              </div>
+              <div class="exam-hub-info">
+                <div class="exam-hub-badge-row">
+                  <span class="exam-hub-badge" data-i18n="examHubBadge">KHẢO SÁT & KIỂM TRA TRỰC TUYẾN</span>
+                  <span class="exam-hub-anti-cheat-pill" title="Hệ thống tích hợp giám sát & khóa trình duyệt">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                    <span data-i18n="examHubAntiCheat">Kiosk Anti-Cheat</span>
+                  </span>
+                </div>
+                <h3 class="exam-hub-title" data-i18n="examHubTitle">Phòng Thi & Khảo Sát Kiến Thức Địa Lý</h3>
+                <p class="exam-hub-desc" data-i18n="examHubDesc">Nhập mã bài kiểm tra do Giáo viên hoặc Ban Quản Trị cung cấp để mở đề và bắt đầu làm bài theo thời gian quy định.</p>
+              </div>
+
+              <!-- Admin / Developer / Teacher Quick Controls -->
+              <div class="exam-hub-admin-actions" id="exam-hub-admin-actions" style="display: none;">
+                <button type="button" class="btn btn-sm btn-primary" onclick="openCreateExamModal()">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  <span data-i18n="btnCreateExam">+ Đăng Bài Kiểm Tra</span>
+                </button>
+                <button type="button" class="btn btn-sm btn-secondary" onclick="openAdminExamManager()">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                  <span data-i18n="btnManageExams">Quản Lý Phòng Thi & Bài Nộp</span>
+                  <span class="badge-counter" id="exam-submissions-count" style="display: none;">0</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Form Nhập Mã Bài Thi -->
+            <form class="exam-hub-code-form" onsubmit="handleExamCodeSubmit(event)">
+              <div class="exam-code-input-wrap">
+                <span class="exam-code-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                  </svg>
+                </span>
+                <input type="text" id="exam-code-input" class="exam-code-input" data-i18n-placeholder="examCodePlaceholder" placeholder="Nhập mã bài kiểm tra hoặc khảo sát..." autocomplete="off" spellcheck="false" required>
+              </div>
+              <button type="submit" class="btn btn-primary btn-enter-exam" id="btn-enter-exam">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                  <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+                  <polyline points="10 17 15 12 10 7"/>
+                  <line x1="15" y1="12" x2="3" y2="12"/>
+                </svg>
+                <span data-i18n="btnEnterExam">Vào Phòng Thi</span>
+              </button>
+            </form>
+
+            <div class="exam-hub-footer-notice">
+              <span class="exam-notice-icon">⚠️</span>
+              <span><strong data-i18n="examNoticeTitle">Quy chế phòng thi:</strong> <span data-i18n="examNoticeText">Khi bài kiểm tra bật chế độ Khóa trình duyệt, hệ thống sẽ yêu cầu toàn màn hình. Mọi hành vi chuyển tab, thu nhỏ hoặc thoát trình duyệt đều sẽ được ghi lại và gửi báo cáo về cho Quản trị viên.</span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- ====================================================================
+      TAB 3: TÀI LIỆU ĐÃ LƯU (SAVED / BOOKMARKS)
+      ==================================================================== -->

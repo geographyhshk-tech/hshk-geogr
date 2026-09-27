@@ -1,0 +1,20 @@
+[
+  {
+    "id": "usr-test-student-001",
+    "name": "Hoc Sinh Test API",
+    "createdAt": "18/09/2026",
+    "email": "test.student001@gmail.com",
+    "role": "user",
+    "userType": "Há»c sinh THCS"
+  },
+  {
+    "id": "piRbDDEmqUak5tLUha2PaCMu6eU2",
+    "name": "Nguyen Van Hoc Sinh",
+    "email": "hocsinh_moi_20260926212634@gmail.com",
+    "password": "$pbkdf2$100000$047f14ab22341b8e6b93f4522b67c43a$8423c6954ec2c1b2a376f77df3de4d6d9a49145fa5863efeec3b1688c42be8b4",
+    "userType": "Học sinh THCS",
+    "role": "user",
+    "authProvider": "firebase",
+    "createdAt": "26/9/2026"
+  }
+]

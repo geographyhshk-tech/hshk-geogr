@@ -1,0 +1,878 @@
+      <div class="tab-view" id="tab-view-admin-panel">
+        <div id="admin-unauthorized-msg" class="empty-state" style="display: none;">
+          <div class="empty-state-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="8" x2="12" y2="12"></line>
+              <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+          </div>
+          <h3 data-i18n="unauthorizedTitle">Truy cập bị từ chối</h3>
+          <p data-i18n="unauthorizedDesc">Khu vực này chỉ dành cho Quản Trị Viên (Admin). Vui lòng đăng nhập với tài
+            khoản Admin.</p>
+          <button class="btn btn-primary" style="margin-top: 14px;"
+            onclick="window.geoAuth.quickLoginAs('admin'); showToast('Đã chuyển sang tài khoản Admin!', 'info');">
+            Đăng nhập Admin mẫu
+          </button>
+        </div>
+
+        <div id="admin-dashboard-content">
+          <div class="section-header">
+            <div class="section-title-wrap">
+              <h2 class="section-title">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="3" width="7" height="7"></rect>
+                  <rect x="14" y="3" width="7" height="7"></rect>
+                  <rect x="14" y="14" width="7" height="7"></rect>
+                  <rect x="3" y="14" width="7" height="7"></rect>
+                </svg>
+                <span data-i18n="admTitle">Bảng Điều Khiển Quản Trị Viên</span>
+              </h2>
+              <p class="section-subtitle" data-i18n="admDesc">Toàn quyền đăng, chỉnh sửa bài viết, tài liệu, duyệt
+                confession & giải đáp học sinh trong hệ thống</p>
+            </div>
+          </div>
+
+          <!-- Admin Sub-Navbar / Quick Navigation Bar -->
+          <div class="admin-sub-navbar-wrapper">
+            <nav class="admin-sub-navbar" id="admin-sub-navbar" aria-label="Admin Navigation">
+              <button type="button" class="admin-sub-nav-btn active" data-admin-tab="overview"
+                onclick="switchAdminTab('overview')">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="3" width="7" height="7"></rect>
+                  <rect x="14" y="3" width="7" height="7"></rect>
+                  <rect x="14" y="14" width="7" height="7"></rect>
+                  <rect x="3" y="14" width="7" height="7"></rect>
+                </svg>
+                <span data-i18n="admTabOverview">Tổng quan</span>
+              </button>
+              <button type="button" class="admin-sub-nav-btn" data-admin-tab="confessions"
+                onclick="switchAdminTab('confessions')">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                  <polyline points="22,6 12,13 2,6"></polyline>
+                </svg>
+                <span data-i18n="admTabConfessions">Hòm Confession</span>
+                <span class="admin-sub-nav-badge" id="adm-nav-badge-cfs" style="display: none;">0</span>
+              </button>
+              <button type="button" class="admin-sub-nav-btn" data-admin-tab="members"
+                onclick="switchAdminTab('members')">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="9" cy="7" r="4"></circle>
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+                <span data-i18n="admTabMembers">Số lượng thành viên</span>
+                <span class="admin-sub-nav-badge badge-neutral" id="adm-nav-badge-users">0</span>
+              </button>
+              <button type="button" class="admin-sub-nav-btn" data-admin-tab="analytics"
+                onclick="switchAdminTab('analytics')">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="18" y1="20" x2="18" y2="10"></line>
+                  <line x1="12" y1="20" x2="12" y2="4"></line>
+                  <line x1="6" y1="20" x2="6" y2="14"></line>
+                </svg>
+                <span data-i18n="admTabAnalytics">Top tài liệu &amp; Thống kê</span>
+              </button>
+              <button type="button" class="admin-sub-nav-btn" data-admin-tab="security"
+                onclick="switchAdminTab('security')">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
+                </svg>
+                <span data-i18n="admTabSecurity">Danh sách chặn &amp; An ninh</span>
+                <span class="admin-sub-nav-badge badge-danger" id="adm-nav-badge-blocked"
+                  style="display: none;">0</span>
+              </button>
+              <button type="button" class="admin-sub-nav-btn" id="adm-nav-btn-backup" data-admin-tab="backup"
+                onclick="switchAdminTab('backup')" style="display: none;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+                  <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
+                  <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
+                </svg>
+                <span data-i18n="admTabBackup">Sao lưu dữ liệu</span>
+              </button>
+              <button type="button" class="admin-sub-nav-btn" data-admin-tab="all" onclick="switchAdminTab('all')">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="8" y1="6" x2="21" y2="6"></line>
+                  <line x1="8" y1="12" x2="21" y2="12"></line>
+                  <line x1="8" y1="18" x2="21" y2="18"></line>
+                  <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                  <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                  <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                </svg>
+                <span data-i18n="admTabAll">Xem tất cả</span>
+              </button>
+            </nav>
+          </div>
+
+          <!-- ====================================================================
+               PANE 1: TỔNG QUAN (OVERVIEW)
+               ==================================================================== -->
+          <div class="admin-section-pane" id="admin-pane-overview">
+            <!-- Admin Quick Action Cards -->
+            <div class="hero-stats"
+              style="margin-bottom: 28px; background: white; border: 1px solid var(--border-color); color: var(--text-main); grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));">
+              <div class="stat-item">
+                <div class="stat-num" id="adm-stat-hshk" style="color: var(--primary);">0</div>
+                <div class="stat-label" data-i18n="admStatHshk">Bài viết HSHK</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-num" id="adm-stat-group" style="color: var(--secondary);">0</div>
+                <div class="stat-label" data-i18n="admStatGroup">Bài viết Group Địa lí</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-num" id="adm-stat-docs" style="color: #f59e0b;">0</div>
+                <div class="stat-label" data-i18n="admStatDocs">Tài liệu trong kho</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-num" id="adm-stat-cfs" style="color: #ec4899;">0</div>
+                <div class="stat-label" data-i18n="admStatCfs">Hòm thư Confession</div>
+              </div>
+              <div class="stat-item" style="cursor: pointer;" onclick="switchAdminTab('members')" title="Nhấp để xem danh sách thành viên chi tiết">
+                <div class="stat-num" id="adm-stat-users" style="color: #10b981;">0</div>
+                <div class="stat-label" data-i18n="admStatUsers">Tài khoản đã đăng ký</div>
+              </div>
+            </div>
+
+            <!-- Section: Quản Lý Khảo Sát & Phòng Thi Trực Tuyến -->
+            <div class="home-section-card exam-admin-card" id="exam-admin-card"
+              style="margin-bottom: 28px; border-left: 5px solid #0d9488; background: linear-gradient(180deg, #ffffff 0%, rgba(13, 148, 136, 0.04) 100%);">
+              <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+                <div style="display: flex; align-items: center; gap: 14px;">
+                  <div class="section-icon-box"
+                    style="background: linear-gradient(135deg, #0d9488, #2563eb); width: 48px; height: 48px;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                      <polyline points="14 2 14 8 20 8"/>
+                      <line x1="16" y1="13" x2="8" y2="13"/>
+                      <line x1="16" y1="17" x2="8" y2="17"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.25rem; font-weight: 700; margin: 0; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                      <span>Khảo Sát &amp; Phòng Thi Trực Tuyến</span>
+                      <span class="badge" style="background: rgba(13, 148, 136, 0.15); color: var(--primary); border: 1px solid rgba(13, 148, 136, 0.3); font-size: 0.76rem;">KIOSK LOCK &amp; ANTI-CHEAT</span>
+                    </h3>
+                    <p style="color: var(--text-muted); font-size: 0.86rem; margin-top: 4px; margin-bottom: 0;">
+                      Tạo đề thi/phiếu khảo sát mới, thiết lập khóa trình duyệt và theo dõi bài làm nộp về từ thí sinh.
+                    </p>
+                  </div>
+                </div>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+                  <button type="button" class="btn btn-sm btn-primary" onclick="openCreateExamModal()" style="display: flex; align-items: center; gap: 6px;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    <span>+ Đăng Bài Kiểm Tra</span>
+                  </button>
+                  <button type="button" class="btn btn-sm btn-secondary" onclick="openAdminExamManager()" style="display: flex; align-items: center; gap: 6px;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                    <span>Quản Lý Phòng Thi &amp; Bài Nộp</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Section: Chế độ Bảo Trì Hệ Thống (Maintenance Control Card) -->
+            <div class="home-section-card maintenance-admin-card" id="maintenance-admin-card"
+              style="margin-bottom: 28px; border-left: 5px solid #f59e0b;">
+              <div
+                style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+                <div style="display: flex; align-items: center; gap: 14px;">
+                  <div class="section-icon-box"
+                    style="background: linear-gradient(135deg, #f59e0b, #d97706); width: 48px; height: 48px;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path
+                        d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z">
+                      </path>
+                    </svg>
+                  </div>
+                  <div>
+                    <h3
+                      style="font-family: 'Space Grotesk', sans-serif; font-size: 1.25rem; font-weight: 700; margin: 0; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                      <span data-i18n="admMaintTitle">Chế Độ Bảo Trì Website</span>
+                      <span class="badge" id="adm-maintenance-status-badge"
+                        style="background: #10b981; color: white;">ĐANG HOẠT ĐỘNG BÌNH THƯỜNG</span>
+                    </h3>
+                    <p style="color: var(--text-muted); font-size: 0.86rem; margin-top: 4px; margin-bottom: 0;"
+                      id="adm-maintenance-status-desc">
+                      Khi bật chế độ bảo trì: Thành viên chỉ xem được trang chủ (không xem được bài viết và không dùng
+                      được AI).
+                    </p>
+                  </div>
+                </div>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;"
+                  id="adm-maintenance-actions-wrap">
+                  <!-- Rendered dynamically based on permissions -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Section: Cấu Hình & Quyền Kiểm Soát Nhà Phát Triển (Developer System Controls) -->
+            <div class="home-section-card developer-admin-card" id="developer-admin-card"
+              style="margin-bottom: 28px; border-left: 5px solid #6366f1; background: linear-gradient(180deg, #ffffff 0%, rgba(99, 102, 241, 0.03) 100%);">
+              <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin-bottom: 18px;">
+                <div style="display: flex; align-items: center; gap: 14px;">
+                  <div class="section-icon-box"
+                    style="background: linear-gradient(135deg, #6366f1, #4f46e5); width: 48px; height: 48px;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                      <polyline points="2 17 12 22 22 17"></polyline>
+                      <polyline points="2 12 12 17 22 12"></polyline>
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.25rem; font-weight: 700; margin: 0; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                      <span data-i18n="devControlsTitle">Quyền Điều Khiển Nhà Phát Triển</span>
+                      <span class="badge" style="background: #e0e7ff; color: #4338ca; border: 1px solid #c7d2fe; font-size: 0.76rem;" data-i18n="devBadge">DEV / SUPER ADMIN</span>
+                    </h3>
+                    <p style="color: var(--text-muted); font-size: 0.86rem; margin-top: 4px; margin-bottom: 0;" data-i18n="devControlsDesc">
+                      Các công tắc kiểm soát chuyên sâu tính năng hệ thống và bảo trì dịch vụ con.
+                    </p>
+                  </div>
+                </div>
+                <div>
+                  <button class="btn btn-sm btn-outline-primary" onclick="openDinoGameModal()" style="display: flex; align-items: center; gap: 6px;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                    </svg>
+                    <span data-i18n="devBtnTestDino">Chơi thử Game Khủng Long</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Dev Switches Grid -->
+              <div class="dev-controls-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+                <!-- Switch 1: Từ chối Đăng nhập Google -->
+                <div class="dev-control-item" style="background: white; border: 1.5px solid var(--border-color); border-radius: var(--radius-md); padding: 16px; display: flex; justify-content: space-between; align-items: center; gap: 14px;">
+                  <div>
+                    <div style="font-weight: 700; font-size: 0.95rem; color: var(--text-main); margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
+                      </svg>
+                      <span data-i18n="devToggleGoogleTitle">Từ chối Đăng nhập Google</span>
+                    </div>
+                    <div style="font-size: 0.82rem; color: var(--text-muted);" id="dev-google-login-status-desc" data-i18n="devToggleGoogleDesc">
+                      Khi bật: Người dùng bấm đăng nhập Google sẽ nhận thông báo Google đang bị lỗi.
+                    </div>
+                  </div>
+                  <label class="switch-toggle" style="position: relative; display: inline-block; width: 46px; height: 26px; flex-shrink: 0;">
+                    <input type="checkbox" id="toggle-dev-google-login" onchange="handleToggleGoogleLogin(this.checked)" style="opacity: 0; width: 0; height: 0;">
+                    <span class="switch-slider" style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #cbd5e1; transition: .3s; border-radius: 34px;"></span>
+                  </label>
+                </div>
+
+                <!-- Switch 2: Bật / Tắt Chế độ Trợ lý AI -->
+                <div class="dev-control-item" style="background: white; border: 1.5px solid var(--border-color); border-radius: var(--radius-md); padding: 16px; display: flex; justify-content: space-between; align-items: center; gap: 14px;">
+                  <div>
+                    <div style="font-weight: 700; font-size: 0.95rem; color: var(--text-main); margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-4.5a1 1 0 0 1-2 0V7a1 1 0 0 1 2 0z"></path>
+                      </svg>
+                      <span data-i18n="devToggleAiTitle">Chế độ Trợ lý AI (Bảo trì AI)</span>
+                    </div>
+                    <div style="font-size: 0.82rem; color: var(--text-muted);" id="dev-ai-mode-status-desc" data-i18n="devToggleAiDesc">
+                      Khi tắt: Màn hình AI hiện thông báo bảo trì.
+                    </div>
+                  </div>
+                  <label class="switch-toggle" style="position: relative; display: inline-block; width: 46px; height: 26px; flex-shrink: 0;">
+                    <input type="checkbox" id="toggle-dev-ai-mode" onchange="handleToggleAiMode(this.checked)" style="opacity: 0; width: 0; height: 0;">
+                    <span class="switch-slider" style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #cbd5e1; transition: .3s; border-radius: 34px;"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Action Shortcuts -->
+            <div class="posts-grid" style="margin-bottom: 28px;">
+              <div class="home-section-card" style="margin-bottom: 0;">
+                <h3
+                  style="font-family: 'Space Grotesk', sans-serif; font-size: 1.2rem; font-weight: 700; margin-bottom: 8px;"
+                  data-i18n="admShortcutPostsTitle">
+                  Quản lý Bài viết Trang chủ
+                </h3>
+                <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 18px;"
+                  data-i18n="admShortcutPostsDesc">
+                  Đăng bài giới thiệu High School Help Kit hoặc thông báo hoạt động Group Địa Lí.
+                </p>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                  <button class="btn btn-sm btn-primary" onclick="openAddPostModal('hshk')" data-i18n="admBtnNewHshk">+
+                    Bài viết HSHK</button>
+                  <button class="btn btn-sm btn-secondary" onclick="openAddPostModal('group')"
+                    data-i18n="admBtnNewGroup">+ Bài viết Group</button>
+                </div>
+              </div>
+
+              <div class="home-section-card" style="margin-bottom: 0;">
+                <h3
+                  style="font-family: 'Space Grotesk', sans-serif; font-size: 1.2rem; font-weight: 700; margin-bottom: 8px;"
+                  data-i18n="admShortcutDocsTitle">
+                  Quản lý Kho Tài liệu
+                </h3>
+                <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 18px;"
+                  data-i18n="admShortcutDocsDesc">
+                  Thêm tài liệu mới theo 4 phân mục chuẩn, cập nhật tóm tắt và chỉnh sửa.
+                </p>
+                <button class="btn btn-sm btn-primary" onclick="openAddDocumentModal()" data-i18n="admBtnNewDoc">+ Đăng
+                  Tài Liệu Mới</button>
+              </div>
+
+              <div class="home-section-card" style="margin-bottom: 0;">
+                <h3
+                  style="font-family: 'Space Grotesk', sans-serif; font-size: 1.2rem; font-weight: 700; margin-bottom: 8px;"
+                  data-i18n="admShortcutContactTitle">
+                  Quản lý Thông tin Liên hệ
+                </h3>
+                <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 18px;"
+                  data-i18n="admShortcutContactDesc">
+                  Cập nhật số điện thoại, Gmail, link Fanpage, Group học tập và địa chỉ văn phòng.
+                </p>
+                <button class="btn btn-sm btn-primary" onclick="openEditContactModal()"
+                  data-i18n="admBtnEditContact">Chỉnh Sửa Liên Hệ</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ====================================================================
+               PANE 2: HÒM THƯ CONFESSION & HỎI ĐÁP
+               ==================================================================== -->
+          <div class="admin-section-pane" id="admin-pane-confessions" style="display: none;">
+            <div class="home-section-card" style="margin-bottom: 28px;">
+              <div class="home-section-header"
+                style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 20px;">
+                <div class="home-section-title-group">
+                  <div class="section-icon-box" style="background: linear-gradient(135deg, #ec4899, #f43f5e);">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                      <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                  </div>
+                  <div class="section-title-wrap">
+                    <h3 class="section-title" style="font-size: 1.45rem;" data-i18n="admCfsSectionTitle">Hòm Thư
+                      Confession & Hỏi Đáp Từ Học Sinh</h3>
+                    <p class="section-subtitle" data-i18n="admCfsSectionSubtitle">Xem câu hỏi, duyệt tâm sự ẩn danh,
+                      phản
+                      hồi và công khai câu trả lời cho học sinh</p>
+                  </div>
+                </div>
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;" id="admin-cfs-filter-btns">
+                  <button class="btn btn-sm btn-secondary active" id="filter-cfs-all"
+                    onclick="filterAdminConfessions('all')"><span data-i18n="admBtnFilterAll">Tất cả</span> (<span
+                      id="adm-cfs-count-all">0</span>)</button>
+                  <button class="btn btn-sm btn-secondary" id="filter-cfs-unread"
+                    onclick="filterAdminConfessions('unread')"><span data-i18n="admBtnFilterUnread">Chưa đọc</span>
+                    (<span id="adm-cfs-count-unread">0</span>)</button>
+                  <button class="btn btn-sm btn-secondary" id="filter-cfs-answered"
+                    onclick="filterAdminConfessions('answered')"><span data-i18n="admBtnFilterAnswered">Đã trả
+                      lời</span>
+                    (<span id="adm-cfs-count-answered">0</span>)</button>
+                </div>
+              </div>
+
+              <!-- Admin Confessions Scroll Toolbar -->
+              <div class="section-scroll-toolbar" id="admin-cfs-toolbar">
+                <div class="docs-count-pill" id="admin-cfs-count-pill">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                  </svg>
+                  <span id="admin-cfs-toolbar-count">Hòm thư</span>
+                </div>
+                <div class="docs-toolbar-actions">
+                  <span class="scroll-hint-text">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M12 5v14M19 12l-7 7-7-7" />
+                    </svg>
+                    Cuộn để xem tiếp
+                  </span>
+                  <button class="btn btn-sm btn-view-mode" id="btn-toggle-admin-cfs-scroll"
+                    onclick="toggleDocScrollMode('admin-confessions-scroll-wrapper', this)"
+                    title="Chuyển đổi chế độ cuộn gọn hoặc mở rộng toàn bộ">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polyline points="15 3 21 3 21 9"></polyline>
+                      <polyline points="9 21 3 21 3 15"></polyline>
+                      <line x1="21" y1="3" x2="14" y2="10"></line>
+                      <line x1="3" y1="21" x2="10" y2="14"></line>
+                    </svg>
+                    <span>Mở rộng toàn bộ</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Admin Confessions Scroll Wrapper -->
+              <div class="admin-confessions-scroll-wrapper" id="admin-confessions-scroll-wrapper">
+                <div id="admin-confessions-list" class="admin-confessions-list">
+                  <!-- Rendered dynamically by js/app.js -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ====================================================================
+               PANE 3: QUẢN LÝ & SỐ LƯỢNG THÀNH VIÊN
+               ==================================================================== -->
+          <div class="admin-section-pane" id="admin-pane-members" style="display: none;">
+            <div class="home-section-card" style="margin-bottom: 28px;">
+              <div class="home-section-header"
+                style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+                <div class="home-section-title-group">
+                  <div class="section-icon-box icon-group"
+                    style="background: linear-gradient(135deg, #10b981, #0d9488);">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                      <circle cx="9" cy="7" r="4"></circle>
+                      <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                      <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                  </div>
+                  <div class="section-title-wrap">
+                    <h3 class="section-title" style="font-size: 1.45rem;" data-i18n="admUsersTableTitle">Số Lượng & Danh
+                      Sách Tài Khoản Của Web</h3>
+                    <p class="section-subtitle" data-i18n="admUsersTableSubtitle">Thống kê người dùng & Quản lý danh
+                      sách
+                      thành viên (Admin có quyền xóa thành viên vi phạm)</p>
+                  </div>
+                </div>
+                <div id="super-admin-user-controls" style="display: none;">
+                  <button class="btn btn-sm btn-primary" onclick="openAddAdminModal()">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <line x1="12" y1="5" x2="12" y2="19"></line>
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    <span data-i18n="admBtnAddAdmin">Thêm Admin Mới</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Detailed Breakdown Cards -->
+              <div class="hero-stats"
+                style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); margin-bottom: 24px; background: var(--bg-surface); border: 1px solid var(--border-color); color: var(--text-main);">
+                <div class="stat-item">
+                  <div class="stat-num" id="adm-stat-users-total" style="color: #0d9488;">0</div>
+                  <div class="stat-label" data-i18n="admStatTotalUsers">Tổng số tài khoản</div>
+                </div>
+                <div class="stat-item">
+                  <div class="stat-num" id="adm-stat-users-thcs" style="color: #2563eb;">0</div>
+                  <div class="stat-label" data-i18n="admStatThcsUsers">Học sinh THCS</div>
+                </div>
+                <div class="stat-item">
+                  <div class="stat-num" id="adm-stat-users-parent" style="color: #f59e0b;">0</div>
+                  <div class="stat-label" data-i18n="admStatParentUsers">Phụ huynh</div>
+                </div>
+                <div class="stat-item">
+                  <div class="stat-num" id="adm-stat-users-other" style="color: #8b5cf6;">0</div>
+                  <div class="stat-label" data-i18n="admStatOtherUsers">Khác (GV/THPT)</div>
+                </div>
+                <div class="stat-item">
+                  <div class="stat-num" id="adm-stat-users-admin" style="color: #ef4444;">0</div>
+                  <div class="stat-label" data-i18n="admStatAdminUsers">Quản trị viên (Admin)</div>
+                </div>
+              </div>
+
+              <!-- Users List Scroll Toolbar -->
+              <div class="section-scroll-toolbar" id="admin-users-toolbar">
+                <div class="docs-count-pill" id="admin-users-count-pill">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                  </svg>
+                  <span id="admin-users-toolbar-count">Tài khoản thành viên</span>
+                </div>
+                <div class="docs-toolbar-actions">
+                  <span class="scroll-hint-text">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M12 5v14M19 12l-7 7-7-7" />
+                    </svg>
+                    Cuộn dọc/ngang để xem chi tiết
+                  </span>
+                  <button class="btn btn-sm btn-view-mode" id="btn-toggle-admin-users-scroll"
+                    onclick="toggleDocScrollMode('admin-users-scroll-wrapper', this)"
+                    title="Chuyển đổi chế độ cuộn gọn hoặc mở rộng toàn bộ">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polyline points="15 3 21 3 21 9"></polyline>
+                      <polyline points="9 21 3 21 3 15"></polyline>
+                      <line x1="21" y1="3" x2="14" y2="10"></line>
+                      <line x1="3" y1="21" x2="10" y2="14"></line>
+                    </svg>
+                    <span>Mở rộng toàn bộ</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Table of Accounts Scroll Wrapper -->
+              <div class="users-scroll-wrapper" id="admin-users-scroll-wrapper">
+                <div class="table-responsive" style="border: none; border-radius: 0; margin-bottom: 0;">
+                  <table class="custom-table">
+                    <thead>
+                      <tr>
+                        <th data-i18n="colStt">STT</th>
+                        <th data-i18n="colName">Họ và tên</th>
+                        <th data-i18n="colEmail">Địa chỉ Gmail</th>
+                        <th data-i18n="colPassword" style="text-align: center; min-width: 145px;">Mật khẩu</th>
+                        <th data-i18n="colUserType">Đối tượng</th>
+                        <th data-i18n="colRole">Vai trò</th>
+                        <th data-i18n="colDate">Ngày tạo</th>
+                        <th data-i18n="colStatus">Trạng thái</th>
+                        <th id="admin-table-action-header" style="text-align: center;" data-i18n="colActions">Hành động
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody id="admin-users-table-body">
+                      <!-- Rendered dynamically by js/app.js -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ====================================================================
+               PANE 4: TOP TÀI LIỆU & THỐNG KÊ (ANALYTICS)
+               ==================================================================== -->
+          <div class="admin-section-pane" id="admin-pane-analytics" style="display: none;">
+            <div class="admin-tab-card" style="margin-top: 0; margin-bottom: 28px;">
+              <div class="admin-tab-header">
+                <div>
+                  <div class="admin-tab-title" style="display: flex; align-items: center; gap: 8px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2">
+                      <line x1="18" y1="20" x2="18" y2="10"></line>
+                      <line x1="12" y1="20" x2="12" y2="4"></line>
+                      <line x1="6" y1="20" x2="6" y2="14"></line>
+                    </svg>
+                    <span>Thống Kê Lượt Xem, Lượt Tải &amp; Top Tìm Kiếm Thực Tế</span>
+                  </div>
+                  <div class="admin-tab-desc">Theo dõi mức độ quan tâm của học sinh và xếp hạng tài liệu được tìm kiếm,
+                    tải nhiều nhất</div>
+                </div>
+                <button class="btn btn-sm btn-outline-secondary" onclick="renderAdminAnalytics()">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="23 4 23 10 17 10"></polyline>
+                    <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                  </svg>
+                  <span>Cập nhật</span>
+                </button>
+              </div>
+
+              <div
+                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px;">
+                <div class="stat-item"
+                  style="border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 16px; background: var(--bg-surface);">
+                  <div class="stat-num" id="adm-stat-total-views" style="color: #2563eb;">0</div>
+                  <div class="stat-label">Tổng lượt xem tài liệu</div>
+                </div>
+                <div class="stat-item"
+                  style="border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 16px; background: var(--bg-surface);">
+                  <div class="stat-num" id="adm-stat-total-downloads" style="color: #0d9488;">0</div>
+                  <div class="stat-label">Tổng lượt tải xuống</div>
+                </div>
+                <div class="stat-item"
+                  style="border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 16px; background: var(--bg-surface);">
+                  <div class="stat-num" id="adm-stat-avg-rating" style="color: #f59e0b;">5.0 / 5.0</div>
+                  <div class="stat-label">Điểm đánh giá trung bình</div>
+                </div>
+              </div>
+
+              <!-- Top Downloaded & Viewed Documents Table -->
+              <div style="margin-top: 10px;">
+                <h4 style="font-size: 1.05rem; font-weight: 700; color: var(--text-main); margin-bottom: 12px;">Top Tài
+                  Liệu Được Tìm Kiếm &amp; Quan Tâm Nhiều Nhất</h4>
+
+                <!-- Analytics Table Scroll Toolbar -->
+                <div class="section-scroll-toolbar" id="admin-analytics-toolbar">
+                  <div class="docs-count-pill" id="admin-analytics-count-pill">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <line x1="18" y1="20" x2="18" y2="10"></line>
+                      <line x1="12" y1="20" x2="12" y2="4"></line>
+                      <line x1="6" y1="20" x2="6" y2="14"></line>
+                    </svg>
+                    <span id="admin-analytics-toolbar-count">Top tài liệu thực tế</span>
+                  </div>
+                  <div class="docs-toolbar-actions">
+                    <span class="scroll-hint-text">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <path d="M12 5v14M19 12l-7 7-7-7" />
+                      </svg>
+                      Cuộn để xem tiếp
+                    </span>
+                    <button class="btn btn-sm btn-view-mode" id="btn-toggle-admin-analytics-scroll"
+                      onclick="toggleDocScrollMode('admin-analytics-scroll-wrapper', this)"
+                      title="Chuyển đổi chế độ cuộn gọn hoặc mở rộng toàn bộ">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <polyline points="15 3 21 3 21 9"></polyline>
+                        <polyline points="9 21 3 21 3 15"></polyline>
+                        <line x1="21" y1="3" x2="14" y2="10"></line>
+                        <line x1="3" y1="21" x2="10" y2="14"></line>
+                      </svg>
+                      <span>Mở rộng toàn bộ</span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Analytics Table Scroll Wrapper -->
+                <div class="users-scroll-wrapper" id="admin-analytics-scroll-wrapper">
+                  <div class="table-responsive" style="border: none; border-radius: 0; margin-bottom: 0;">
+                    <table class="custom-table">
+                      <thead>
+                        <tr>
+                          <th>Hạng</th>
+                          <th>Tên tài liệu</th>
+                          <th>Chuyên mục</th>
+                          <th>Định dạng</th>
+                          <th>Lượt xem</th>
+                          <th>Lượt tải</th>
+                          <th>Lượt tìm</th>
+                          <th>Đánh giá</th>
+                        </tr>
+                      </thead>
+                      <tbody id="admin-analytics-table-body">
+                        <!-- Rendered dynamically by js/app.js -->
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ====================================================================
+               PANE 5: DANH SÁCH CHẶN (BLACKLIST) & AN NINH
+               ==================================================================== -->
+          <div class="admin-section-pane" id="admin-pane-security" style="display: none;">
+            <!-- Card: Quản Lý Danh Sách Email Bị Chặn (Blacklist) & Xóa Tài Khoản -->
+            <div class="admin-tab-card"
+              style="margin-top: 0; margin-bottom: 28px; border: 1px solid rgba(239, 68, 68, 0.35);">
+              <div class="admin-tab-header" style="border-bottom-color: rgba(239, 68, 68, 0.2);">
+                <div>
+                  <div class="admin-tab-title" style="display: flex; align-items: center; gap: 8px; color: #ef4444;">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                      stroke-width="2.2">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
+                    </svg>
+                    <span>Quản Lý Danh Sách Email Bị Chặn (Blacklist)</span>
+                  </div>
+                  <div class="admin-tab-desc">
+                    Tài khoản có email bị chặn sẽ lập tức bị xóa khỏi hệ thống, đồng thời bị chặn vĩnh viễn không thể
+                    đăng nhập hoặc đăng ký lại.
+                  </div>
+                </div>
+                <button class="btn btn-sm btn-outline-danger" onclick="renderAdminBlockedEmailsList()">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="23 4 23 10 17 10"></polyline>
+                    <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                  </svg>
+                  <span>Làm mới</span>
+                </button>
+              </div>
+
+              <!-- Manual Block Email Form -->
+              <form id="form-admin-manual-block" onsubmit="handleManualBlockEmail(event)"
+                style="background: rgba(239, 68, 68, 0.04); border: 1px dashed rgba(239, 68, 68, 0.3); border-radius: var(--radius-md); padding: 16px 20px; margin-bottom: 20px;">
+                <div
+                  style="font-weight: 700; color: #ef4444; font-size: 0.9rem; margin-bottom: 12px; display: flex; align-items: center; gap: 6px;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                  </svg>
+                  Chặn thủ công địa chỉ Gmail mới
+                </div>
+                <div class="admin-manual-block-grid">
+                  <div class="form-group" style="margin-bottom: 0;">
+                    <label class="form-label" for="manual-block-email" style="font-size: 0.82rem;">Địa chỉ Gmail cần
+                      chặn *</label>
+                    <input type="email" id="manual-block-email" class="form-control form-control-sm"
+                      placeholder="Ví dụ: spambot@gmail.com" required>
+                  </div>
+                  <div class="form-group" style="margin-bottom: 0;">
+                    <label class="form-label" for="manual-block-reason" style="font-size: 0.82rem;">Lý do chặn (Tùy
+                      chọn)</label>
+                    <input type="text" id="manual-block-reason" class="form-control form-control-sm"
+                      placeholder="Ví dụ: Spam bot, vi phạm quy định...">
+                  </div>
+                  <button type="submit" class="btn btn-danger btn-sm" id="btn-submit-manual-block"
+                    style="font-weight: 700; height: 38px; display: flex; align-items: center; gap: 6px;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
+                    </svg>
+                    <span>Chặn &amp; Xóa Tài Khoản</span>
+                  </button>
+                </div>
+              </form>
+
+              <div class="table-responsive">
+                <table class="custom-table">
+                  <thead>
+                    <tr>
+                      <th style="width: 50px;">STT</th>
+                      <th>Địa chỉ Gmail bị chặn</th>
+                      <th>Lý do chặn</th>
+                      <th>Thời gian chặn</th>
+                      <th>Người thực hiện</th>
+                      <th style="text-align: center; width: 130px;">Thao tác</th>
+                    </tr>
+                  </thead>
+                  <tbody id="admin-blocked-emails-table-body">
+                    <!-- Rendered dynamically by js/app.js -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Card: Nhật Ký Cảnh Báo An Ninh & Chống Dò Mật Khẩu (Security Logs) -->
+            <div class="admin-tab-card" style="margin-top: 28px;">
+              <div class="admin-tab-header">
+                <div>
+                  <div class="admin-tab-title" style="display: flex; align-items: center; gap: 8px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2">
+                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    </svg>
+                    <span>Nhật Ký Cảnh Báo An Ninh & Chống Dò Mật Khẩu</span>
+                  </div>
+                  <div class="admin-tab-desc">Hệ thống tự động phát hiện và khóa tài khoản khi có hành vi dò mật khẩu
+                    bất thường</div>
+                </div>
+                <button class="btn btn-sm btn-outline-secondary" onclick="renderAdminSecurityLogs()">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="23 4 23 10 17 10"></polyline>
+                    <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                  </svg>
+                  <span>Làm mới</span>
+                </button>
+              </div>
+
+              <div class="table-responsive">
+                <table class="custom-table">
+                  <thead>
+                    <tr>
+                      <th>STT</th>
+                      <th>Thời gian</th>
+                      <th>Loại cảnh báo</th>
+                      <th>Tài khoản mục tiêu</th>
+                      <th>Số lần sai</th>
+                      <th>Hành động đã xử lý</th>
+                      <th>Trạng thái</th>
+                      <th style="text-align: center;">Mở khóa</th>
+                    </tr>
+                  </thead>
+                  <tbody id="admin-security-logs-body">
+                    <!-- Rendered dynamically by js/app.js -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Card: Phân Tích Thiết Bị & Môi Trường Người Dùng (Tối Ưu Giao Diện - Chỉ Super Admin) -->
+            <div class="admin-tab-card" id="admin-telemetry-card" style="margin-top: 28px;">
+              <div class="admin-tab-header">
+                <div>
+                  <div class="admin-tab-title" style="display: flex; align-items: center; gap: 8px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2">
+                      <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                      <line x1="8" y1="21" x2="16" y2="21"></line>
+                      <line x1="12" y1="17" x2="12" y2="21"></line>
+                    </svg>
+                    <span>Phân Tích Thiết Bị & Môi Trường Người Dùng</span>
+                  </div>
+                  <div class="admin-tab-desc">Thu thập hệ điều hành (Windows/Mac), phiên bản trình duyệt, độ phân giải và danh sách plugin để tối ưu UI</div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                  <span id="telemetry-status-badge" class="badge badge-secondary" style="font-size: 0.78rem;">Đang TẮT</span>
+                  <button class="btn btn-sm btn-outline-primary" id="btn-toggle-telemetry" onclick="handleToggleTelemetry()">
+                    <span id="telemetry-btn-label">Bật Thu Thập</span>
+                  </button>
+                  <button class="btn btn-sm btn-outline-secondary" onclick="renderAdminTelemetryLogs()" title="Làm mới bảng">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polyline points="23 4 23 10 17 10"></polyline>
+                      <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                    </svg>
+                  </button>
+                  <button class="btn btn-sm btn-outline-danger" onclick="handleClearTelemetryLogs()" title="Xóa toàn bộ nhật ký">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polyline points="3 6 5 6 21 6"></polyline>
+                      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                    </svg>
+                    <span>Xóa nhật ký</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="table-responsive">
+                <table class="custom-table">
+                  <thead>
+                    <tr>
+                      <th style="width: 50px;">STT</th>
+                      <th>Thời gian</th>
+                      <th>Hệ điều hành</th>
+                      <th>Trình duyệt & Phiên bản</th>
+                      <th>Độ phân giải / Khung nhìn</th>
+                      <th>Plugin hỗ trợ</th>
+                    </tr>
+                  </thead>
+                  <tbody id="admin-telemetry-table-body">
+                    <!-- Rendered dynamically by js/app.js -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- ====================================================================
+               PANE 6: SAO LƯU & KHÔI PHỤC CƠ SỞ DỮ LIỆU (SUPER ADMIN)
+               ==================================================================== -->
+          <div class="admin-section-pane" id="admin-pane-backup" style="display: none;">
+            <div class="admin-tab-card" id="admin-backup-restore-card"
+              style="margin-top: 0; margin-bottom: 28px; display: none;">
+              <div class="admin-tab-header">
+                <div>
+                  <div class="admin-tab-title" style="display: flex; align-items: center; gap: 8px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2">
+                      <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+                      <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
+                      <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
+                    </svg>
+                    <span>Sao Lưu & Khôi Phục Cơ Sở Dữ Liệu (Quyền Admin Tổng)</span>
+                  </div>
+                  <div class="admin-tab-desc">Chức năng bảo mật cấp cao: Xuất file JSON sao lưu hệ thống hoặc khôi phục
+                    dữ liệu an toàn</div>
+                </div>
+              </div>
+
+              <div style="display: flex; gap: 14px; flex-wrap: wrap; align-items: center; padding-top: 10px;">
+                <button class="btn btn-primary" onclick="handleBackupDatabase()">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                  </svg>
+                  <span>Xuất File Sao Lưu (.JSON)</span>
+                </button>
+
+                <button class="btn btn-outline-primary"
+                  onclick="document.getElementById('db-restore-file-input').click()">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="17 8 12 3 7 8"></polyline>
+                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                  </svg>
+                  <span>Khôi Phục Dữ Liệu Từ File</span>
+                </button>
+                <input type="file" id="db-restore-file-input" accept=".json,application/json" style="display: none;"
+                  onchange="handleRestoreDatabase(event)">
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ========================================================================
+    MODALS SYSTEM
+    ======================================================================== -->
+
+  <!-- 1. Modal: Đăng ký (Register) -->

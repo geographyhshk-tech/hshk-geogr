@@ -1,0 +1,367 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // =========================================================================
+    // HỆ THỐNG PHÂN QUYỀN & BẢO MẬT FIRESTORE (SECURITY RULES)
+    // Nền tảng Giáo dục Địa Lí - High School Help Kit (Geography Edu)
+    // =========================================================================
+
+    // -------------------------------------------------------------------------
+    // CÁC HÀM BỔ TRỢ XÁC THỰC & PHÂN QUYỀN (HELPER FUNCTIONS)
+    // -------------------------------------------------------------------------
+
+    // Kiểm tra người dùng đã đăng nhập hay chưa
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Lấy email của người dùng đang đăng nhập (chuyển về chữ thường)
+    function getUserEmail() {
+      return isAuthenticated() && request.auth.token.email != null 
+        ? request.auth.token.email.lower() 
+        : "";
+    }
+
+    // Kiểm tra tài khoản Super Admin (Chủ sở hữu & Quản trị cấp cao duy nhất)
+    function isSuperAdmin() {
+      return isAuthenticated() && (
+        (getUserEmail() == "vut510624@gmail.com" || request.auth.token.email == "vut510624@gmail.com") &&
+        (request.auth.token.email_verified == true || request.auth.token.firebase.sign_in_provider != "password")
+      );
+    }
+
+    // Kiểm tra tài khoản Quản trị viên (Admin hoặc Super Admin)
+    // TỐI ƯU 0-READ: Sử dụng Custom Claims và Auth Token thay vì get()/exists() để không tiêu tốn lượt đọc Firestore
+    // BẢO MẬT: Bắt buộc email phải được xác minh (email_verified == true) hoặc đăng nhập qua Google OAuth
+    function isAdmin() {
+      return isAuthenticated() && (
+        isSuperAdmin() ||
+        request.auth.token.admin == true ||
+        request.auth.token.role == "admin" ||
+        (
+          (getUserEmail() == "vut510624@gmail.com" || getUserEmail() == "hshk.project@gmail.com") &&
+          (request.auth.token.email_verified == true || request.auth.token.firebase.sign_in_provider != "password")
+        )
+      );
+    }
+
+    // Kiểm tra người dùng có phải chủ sở hữu tài liệu/bản ghi dựa trên Document ID
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Kiểm tra người dùng có phải chủ sở hữu dựa trên email
+    function isEmailOwner(email) {
+      return isAuthenticated() && getUserEmail() == email.lower();
+    }
+
+    // -------------------------------------------------------------------------
+    // CÁC HÀM VALIDATE DỮ LIỆU ĐẦU VÀO (DATA VALIDATION HELPERS)
+    // -------------------------------------------------------------------------
+
+    // Kiểm tra không rỗng chuỗi
+    function isValidString(val, minLen, maxLen) {
+      return val is string && val.size() >= minLen && val.size() <= maxLen;
+    }
+
+    // =========================================================================
+    // 1. COLLECTION: USERS (Danh sách tài khoản người dùng)
+    // Schema: {id, name, email, password, role, userType, createdAt}
+    // =========================================================================
+    match /users/{userId} {
+      // Cho phép đọc: Quản trị viên đọc được toàn bộ danh sách, người dùng thường chỉ đọc tài khoản của mình
+      allow read: if isAdmin() || isOwner(userId) || (isAuthenticated() && resource.data.email == getUserEmail());
+
+      // Tạo tài khoản mới:
+      // - Super Admin có thể tạo mọi tài khoản (kể cả Admin)
+      // - Người dùng đăng ký thường KHÔNG ĐƯỢC tự nâng quyền lên "admin"
+      allow create: if isSuperAdmin() || isAdmin() || (
+        request.resource.data.keys().hasAll(['name', 'email', 'role', 'userType']) &&
+        isValidString(request.resource.data.name, 2, 100) &&
+        request.resource.data.email is string &&
+        request.resource.data.email.matches('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$') &&
+        // Chặn người dùng thường tự gán quyền admin khi đăng ký
+        (isAdmin() || (request.resource.data.role == "user" && request.resource.data.userType != "Admin"))
+      );
+
+      // Cập nhật thông tin tài khoản (Đổi mật khẩu, sửa tên, phân quyền):
+      // - Super Admin cập nhật được tất cả
+      // - Chủ tài khoản được đổi thông tin cá nhân/mật khẩu nhưng KHÔNG được tự đổi role thành admin
+      // - Admin thường cập nhật thông tin thành viên nhưng không sửa được Super Admin
+      allow update: if isSuperAdmin() || (
+        isAdmin() && resource.data.email != "vut510624@gmail.com"
+      ) || (
+        (isOwner(userId) || (isAuthenticated() && resource.data.email == getUserEmail())) &&
+        // Không cho phép tự đổi role thành admin nếu chưa phải admin
+        (request.resource.data.role == resource.data.role || isAdmin())
+      );
+
+      // Xóa tài khoản:
+      // - Super Admin xóa được mọi tài khoản (ngoại trừ chính mình)
+      // - Admin xóa được thành viên thường (KHÔNG ĐƯỢC xóa Admin hoặc Super Admin)
+      allow delete: if (
+        isSuperAdmin() && resource.data.email != "vut510624@gmail.com"
+      ) || (
+        isAdmin() && 
+        resource.data.role != "admin" && 
+        resource.data.userType != "Admin" &&
+        resource.data.email != "vut510624@gmail.com" &&
+        resource.data.email != "hshk.project@gmail.com"
+      );
+    }
+
+    // =========================================================================
+    // 1B. COLLECTION: DELETED_ACCOUNTS (Tín hiệu Realtime Buộc Đăng Xuất & Chặn Đăng Nhập)
+    // =========================================================================
+    match /deleted_accounts/{docId} {
+      // Cho phép mọi client đọc/lắng nghe để phát hiện bị Admin xóa và buộc đăng xuất tức thì
+      allow read: if true;
+      // Chỉ Admin hoặc Super Admin mới có quyền thêm/xóa tín hiệu tài khoản bị xóa
+      allow write: if isAdmin();
+    }
+
+    // =========================================================================
+    // 2. COLLECTION: DOCUMENTS (Kho tài liệu Địa lí)
+    // Schema: {id, title, mainCat, subCat, grade, format, size, downloads, author, date, desc, ratings, avgRating, comments}
+    // =========================================================================
+    match /documents/{docId} {
+      // Đọc tài liệu: Công khai cho tất cả mọi người (kể cả khách chưa đăng nhập)
+      allow read: if true;
+
+      // Thêm/Xóa tài liệu: Chỉ Admin và Super Admin
+      allow create, delete: if isAdmin();
+
+      // Cập nhật tài liệu (BẢO VỆ CHỐNG PHÁ HOẠI DỮ LIỆU):
+      // - Admin cập nhật toàn diện nội dung, file đính kèm
+      // - Người dùng thường chỉ được cập nhật lượt tải (tăng dần), đánh giá (1-5 sao), hoặc bình luận
+      // - Chặn hạ lượt tải về 0 hoặc số âm
+      allow update: if isAdmin() || (
+        isAuthenticated() && 
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['downloads', 'ratings', 'avgRating', 'comments']) &&
+        (request.resource.data.downloads == resource.data.downloads || (
+          request.resource.data.downloads is number && 
+          request.resource.data.downloads >= resource.data.downloads &&
+          request.resource.data.downloads <= resource.data.downloads + 5
+        ))
+      ) || (
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['downloads']) &&
+        request.resource.data.downloads is number &&
+        request.resource.data.downloads >= resource.data.downloads &&
+        request.resource.data.downloads <= resource.data.downloads + 5
+      );
+    }
+
+    // =========================================================================
+    // 3. COLLECTION: SAVED_DOCS (Bộ sưu tập tài liệu cá nhân đã lưu)
+    // Schema: {email, docIds: []} (Document ID thường là userEmail)
+    // =========================================================================
+    match /saved_docs/{docEmail} {
+      // Chỉ người dùng sở hữu email này hoặc Admin mới được xem danh sách lưu
+      allow read: if isAdmin() || isEmailOwner(docEmail) || (resource != null && isEmailOwner(resource.data.email));
+
+      // Chỉ người dùng sở hữu email này hoặc Admin mới được thêm/sửa/xóa danh sách lưu của mình
+      allow write: if isAdmin() || isEmailOwner(docEmail) || (
+        isAuthenticated() && 
+        request.resource.data.email is string && 
+        isEmailOwner(request.resource.data.email)
+      );
+    }
+
+    // =========================================================================
+    // 4. COLLECTION: HSHK_POSTS (Bài viết giới thiệu dự án High School Help Kit)
+    // Schema: {id, title, tag, author, date, content}
+    // =========================================================================
+    match /hshk_posts/{postId} {
+      // Đọc bài viết: Công khai cho tất cả khách và người dùng
+      allow read: if true;
+
+      // Đăng bài, Chỉnh sửa, Xóa bài: Chỉ Admin và Super Admin
+      allow write: if isAdmin() && (
+        request.method == "delete" || (
+          request.resource.data.keys().hasAll(['title', 'content']) &&
+          isValidString(request.resource.data.title, 3, 300) &&
+          isValidString(request.resource.data.content, 5, 20000)
+        )
+      );
+    }
+
+    // =========================================================================
+    // 5. COLLECTION: GROUP_POSTS (Bài viết cộng đồng Group Địa Lí)
+    // Schema: {id, title, tag, author, date, content}
+    // =========================================================================
+    match /group_posts/{postId} {
+      // Đọc bài viết: Công khai cho tất cả khách và người dùng
+      allow read: if true;
+
+      // Đăng bài, Chỉnh sửa, Xóa bài: Chỉ Admin và Super Admin
+      allow write: if isAdmin() && (
+        request.method == "delete" || (
+          request.resource.data.keys().hasAll(['title', 'content']) &&
+          isValidString(request.resource.data.title, 3, 300) &&
+          isValidString(request.resource.data.content, 5, 20000)
+        )
+      );
+    }
+
+    // =========================================================================
+    // 6. COLLECTION: CONFESSIONS (Hòm thư Confession & Hỏi Đáp Học Sinh)
+    // Schema: {id, senderName, senderEmail, category, subject, message, isAnonymous, createdAt, status, reply, replyBy, replyDate}
+    // =========================================================================
+    match /confessions/{cfsId} {
+      // Đọc confession:
+      // - Admin xem được toàn bộ hòm thư (kể cả câu hỏi chưa duyệt)
+      // - Người dùng/Học sinh công cộng chỉ đọc được các câu hỏi đã được Admin phản hồi (status == "answered")
+      allow read: if isAdmin() || (resource != null && resource.data.status == "answered");
+
+      // Gửi câu hỏi / Confession mới:
+      // Bất kỳ ai (học sinh ẩn danh hoặc đã đăng nhập) đều có thể gửi câu hỏi
+      allow create: if (
+        request.resource.data.keys().hasAll(['message']) &&
+        isValidString(request.resource.data.message, 5, 5000) &&
+        // Khi tạo mới, chưa thể tự gán câu trả lời của Admin
+        (!request.resource.data.keys().hasAny(['reply']) || request.resource.data.reply == null || request.resource.data.reply == "")
+      );
+
+      // Phản hồi (Trả lời), Đổi trạng thái đã xem, Sửa câu trả lời: Chỉ Admin
+      allow update: if isAdmin();
+
+      // Xóa câu hỏi: Chỉ Admin
+      allow delete: if isAdmin();
+    }
+
+    // =========================================================================
+    // 7. COLLECTION: CONTACT_INFO (Thông tin liên hệ & Văn phòng dự án)
+    // Schema: {project_name, slogan, email, hotline, fanpage_name, fanpage_url, group_name, group_url, address, work_hours}
+    // =========================================================================
+    match /contact_info/{contactDoc} {
+      // Đọc thông tin liên hệ: Công khai
+      allow read: if true;
+
+      // Cập nhật thông tin liên hệ: Chỉ Admin và Super Admin
+      allow write: if isAdmin();
+    }
+
+    // =========================================================================
+    // 8. COLLECTION: SYSTEM_SETTINGS (Cấu hình hệ thống & Chế độ bảo trì)
+    // Schema: {isMaintenance, maintenancePassword, delegatedMaintenanceAdmins, updatedAt}
+    // =========================================================================
+    match /system_settings/{settingDoc} {
+      // Bất kỳ ai cũng đọc được trạng thái bảo trì
+      allow read: if true;
+
+      // Chỉ Super Admin hoặc Admin được ủy quyền mới có thể đổi cài đặt bảo trì
+      allow write: if isSuperAdmin() || (
+        isAdmin() && (
+          request.resource.data.diff(resource.data).affectedKeys().hasOnly(['isMaintenance', 'updatedAt', 'lastToggledBy'])
+        )
+      );
+    }
+
+    // =========================================================================
+    // 9. COLLECTION: SECURITY_INCIDENTS (Nhật ký cảnh báo bảo mật & Dò mật khẩu)
+    // Schema: {type, targetEmail, failedAttempts, timestamp, userAgent, status, actionTaken}
+    // =========================================================================
+    match /security_incidents/{incidentId} {
+      // Chỉ Admin và Super Admin mới có quyền xem nhật ký bảo mật
+      allow read: if isAdmin();
+
+      // Cho phép hệ thống ghi nhận vụ việc bảo mật khi phát hiện brute-force
+      allow create: if (
+        request.resource.data.keys().hasAll(['type', 'targetEmail', 'failedAttempts', 'timestamp']) &&
+        request.resource.data.failedAttempts is number &&
+        request.resource.data.type in ['bruteforce_attack', 'unauthorized_access', 'rate_limit_exceeded']
+      );
+
+      // Chỉ Super Admin mới được cập nhật hoặc xóa sự cố (đánh dấu đã xử lý / mở khóa)
+      allow update, delete: if isSuperAdmin();
+    }
+
+    // =========================================================================
+    // 10. COLLECTION: BLOCKED_EMAILS (Danh sách đen email bị chặn & Xóa tài khoản)
+    // Schema: {id, email, reason, blockedAt, blockedBy, blockedTimestamp}
+    // =========================================================================
+    match /blocked_emails/{blockId} {
+      // Cho phép đọc danh sách để kiểm tra tính hợp lệ khi đăng nhập / đăng ký
+      allow read: if true;
+
+      // Chỉ Quản trị viên (Admin & Super Admin) mới có quyền thêm/xóa khỏi danh sách chặn
+      allow create, update, delete: if isAdmin();
+    }
+
+    // =========================================================================
+    // 11. COLLECTION: USER_TELEMETRY (Phân tích thiết bị người dùng để tối ưu UI)
+    // Schema: {os, browser, browserVersion, pluginsCount, pluginsList, screenResolution, timestamp, recordedAt}
+    // =========================================================================
+    match /user_telemetry/{telemetryId} {
+      // Chỉ Quản trị viên và Super Admin mới có quyền xem thông số phân tích thiết bị
+      allow read: if isAdmin();
+
+      // Cho phép ghi nhận thông số môi trường khi tính năng được bật
+      allow create: if (
+        request.resource.data.keys().hasAll(['os', 'browser', 'timestamp']) &&
+        request.resource.data.os is string &&
+        request.resource.data.browser is string &&
+        request.resource.data.timestamp is number
+      );
+
+      // Chỉ Super Admin mới có quyền xóa dữ liệu phân tích
+      allow update, delete: if isSuperAdmin();
+    }
+
+    // =========================================================================
+    // 12. COLLECTION: EXAMS (Phòng thi & Khảo sát kiến thức Địa Lí)
+    // Schema: {id, title, code, durationMinutes, mode, lockBrowser, content, createdBy, creatorEmail, createdAt, isActive}
+    // =========================================================================
+    match /exams/{examId} {
+      // Đọc đề thi/khảo sát: Công khai để học sinh có thể nhập mã và lấy đề làm bài
+      allow read: if true;
+
+      // Tạo bài kiểm tra mới: Chỉ Quản trị viên và Super Admin
+      allow create: if isAdmin() && (
+        request.resource.data.keys().hasAll(['title', 'code', 'content']) &&
+        isValidString(request.resource.data.title, 2, 300) &&
+        isValidString(request.resource.data.code, 2, 50) &&
+        isValidString(request.resource.data.content, 5, 50000)
+      );
+
+      // Cập nhật bài kiểm tra (bật/tắt khóa trình duyệt, sửa đề): Chỉ Admin
+      allow update: if isAdmin();
+
+      // Xóa bài kiểm tra: Chỉ Admin
+      allow delete: if isAdmin();
+    }
+
+    // =========================================================================
+    // 13. COLLECTION: EXAM_SUBMISSIONS (Bài nộp & Nhật ký làm bài của thí sinh)
+    // Schema: {id, examId, examTitle, examCode, studentName, studentEmail, studentRole, answers, timeSpentSeconds, violationsCount, violationLogs, submittedAt, submittedAtStr}
+    // =========================================================================
+    match /exam_submissions/{subId} {
+      // Đọc danh sách bài nộp: Chỉ Quản trị viên và Super Admin
+      allow read: if isAdmin();
+
+      // Nộp bài thi/khảo sát: Cho phép học sinh gửi bài làm kèm thông tin giám sát
+      allow create: if (
+        request.resource.data.keys().hasAll(['examId']) &&
+        request.resource.data.examId is string
+      );
+
+      // Sửa bài nộp: Không cho phép sửa sau khi đã nộp
+      allow update: if false;
+
+      // Xóa bài nộp: Chỉ Quản trị viên
+      allow delete: if isAdmin();
+    }
+
+    // =========================================================================
+    // 14. COLLECTION: GLOBE_COUNTRY_OVERRIDES (Tùy biến dữ liệu bản đồ địa cầu 3D)
+    // =========================================================================
+    match /globe_country_overrides/{overrideId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+  }
+}
+
+

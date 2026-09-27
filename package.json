@@ -1,0 +1,28 @@
+{
+  "name": "geography-edu-hshk",
+  "version": "2.0.0",
+  "description": "Nen tang Luu tru & Hoc tap Dia li - High School Help Kit",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "build": "node tools/build_html.js",
+    "build:html": "node tools/build_html.js",
+    "test": "node tests/run_node_tests.js"
+  },
+  "keywords": [
+    "geography",
+    "education",
+    "hshk",
+    "gemini-ai",
+    "firebase"
+  ],
+  "author": "Tran Huy Vu",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2"
+  },
+  "devDependencies": {}
+}

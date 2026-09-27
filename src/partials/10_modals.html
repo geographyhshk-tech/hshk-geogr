@@ -1,0 +1,1730 @@
+  <div class="modal-backdrop" id="modal-register">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title" data-i18n="modalRegTitle">Đăng Ký Tài Khoản</h3>
+        <button class="modal-close-btn" aria-label="Đóng" onclick="closeAllModals()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <form id="form-register" onsubmit="event.preventDefault(); return (window.submitModalRegister ? submitModalRegister(event) : false);">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="reg-fullname" data-i18n="fullNameLabel">Họ và tên *</label>
+            <input type="text" id="reg-fullname" class="form-control" placeholder="Ví dụ: Trần Hoàng Long" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="reg-email" data-i18n="gmailLabel">Địa chỉ Gmail *</label>
+            <input type="email" id="reg-email" class="form-control" placeholder="Ví dụ: hoanglong@gmail.com" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="reg-password" data-i18n="passwordLabel">Mật khẩu *</label>
+            <div class="password-input-wrap">
+              <input type="password" id="reg-password" class="form-control" placeholder="Tối thiểu 6 ký tự"
+                minlength="6" required>
+              <button type="button" class="password-toggle-btn" data-target="reg-password" title="Hiện mật khẩu"
+                onclick="togglePasswordVisibility('reg-password', this, event)">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path
+                    d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24">
+                  </path>
+                  <line x1="1" y1="1" x2="23" y2="23"></line>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="reg-usertype" data-i18n="userTypeLabel">Đối tượng tham gia *</label>
+            <select id="reg-usertype" class="form-control" required>
+              <option value="Học sinh THCS">Học sinh THCS</option>
+              <option value="Phụ huynh">Phụ huynh</option>
+              <option value="Khác">Khác (Giáo viên, Học sinh THPT, Sinh viên...)</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary modal-close-btn" data-i18n="btnCancel" onclick="closeAllModals()">Hủy</button>
+          <button type="submit" class="btn btn-primary" id="btn-register-submit" data-i18n="btnFinishReg">Hoàn tất Đăng Ký</button>
+        </div>
+      </form>
+      <div class="auth-divider"><span data-i18n="btnOr">hoặc</span></div>
+      <div class="google-signin-wrap">
+        <button type="button" class="btn btn-google" id="btn-google-register" onclick="handleGoogleLogin()">
+          <svg width="20" height="20" viewBox="0 0 48 48">
+            <path fill="#EA4335"
+              d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z" />
+            <path fill="#4285F4"
+              d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z" />
+            <path fill="#FBBC05"
+              d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z" />
+            <path fill="#34A853"
+              d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z" />
+          </svg>
+          <span data-i18n="btnGoogleReg">Đăng ký bằng Google</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Modal: Đăng nhập (Login) -->
+  <div class="modal-backdrop" id="modal-login">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title" data-i18n="modalLoginTitle">Đăng Nhập Hệ Thống</h3>
+        <button class="modal-close-btn" aria-label="Đóng" onclick="closeAllModals()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <form id="form-login" onsubmit="event.preventDefault(); return (window.submitModalLogin ? submitModalLogin(event) : false);">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="login-email" data-i18n="gmailLabel">Địa chỉ Gmail</label>
+            <input type="email" id="login-email" class="form-control" placeholder="Nhập địa chỉ Gmail của bạn" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="login-password" data-i18n="passwordLabel">Mật khẩu</label>
+            <div class="password-input-wrap">
+              <input type="password" id="login-password" class="form-control" placeholder="Nhập mật khẩu của bạn"
+                required>
+              <button type="button" class="password-toggle-btn" data-target="login-password" title="Hiện mật khẩu"
+                onclick="togglePasswordVisibility('login-password', this, event)">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path
+                    d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24">
+                  </path>
+                  <line x1="1" y1="1" x2="23" y2="23"></line>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary modal-close-btn" data-i18n="btnCancel" onclick="closeAllModals()">Hủy</button>
+          <button type="submit" class="btn btn-primary" data-i18n="btnLoginSubmit">Đăng Nhập</button>
+        </div>
+      </form>
+      <div class="auth-divider"><span data-i18n="btnOr">hoặc</span></div>
+      <div class="google-signin-wrap">
+        <button type="button" class="btn btn-google" id="btn-google-login" onclick="handleGoogleLogin()">
+          <svg width="20" height="20" viewBox="0 0 48 48">
+            <path fill="#EA4335"
+              d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z" />
+            <path fill="#4285F4"
+              d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z" />
+            <path fill="#FBBC05"
+              d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z" />
+            <path fill="#34A853"
+              d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z" />
+          </svg>
+          <span data-i18n="btnGoogleLogin">Đăng nhập bằng Google</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Đổi Mật Khẩu (Change Password) -->
+  <div class="modal-backdrop" id="modal-change-password">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title" data-i18n="modalChangePwdTitle">Đổi Mật Khẩu Tài Khoản</h3>
+        <button class="modal-close-btn" aria-label="Đóng" onclick="closeAllModals()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <form id="form-change-password">
+        <div class="modal-body">
+          <div
+            style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 12px 14px; margin-bottom: 18px; display: flex; align-items: center; gap: 12px;">
+            <div class="user-avatar" id="change-pwd-user-avatar" style="width: 36px; height: 36px; font-size: 0.9rem;">U
+            </div>
+            <div>
+              <div style="font-weight: 700; color: var(--text-main); font-size: 0.95rem;" id="change-pwd-user-name">Tên
+                người dùng</div>
+              <div style="font-size: 0.8rem; color: var(--text-muted);" id="change-pwd-user-email">email@example.com
+              </div>
+            </div>
+          </div>
+
+          <!-- Google OAuth Notice (if applicable) -->
+          <div id="change-pwd-google-notice"
+            style="display: none; background: rgba(37, 99, 235, 0.08); border: 1px solid rgba(37, 99, 235, 0.2); border-radius: 8px; padding: 14px; margin-bottom: 14px; font-size: 0.88rem; color: #1e40af;">
+            <div style="display: flex; gap: 8px; align-items: center; font-weight: 700; margin-bottom: 4px;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="16" x2="12" y2="12"></line>
+                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+              </svg>
+              Tài khoản Google
+            </div>
+            Tài khoản này được xác thực trực tiếp qua Google. Bạn không cần đổi mật khẩu tại đây. Mật khẩu của bạn được
+            quản lý và bảo vệ bởi Google.
+          </div>
+
+          <!-- Password Form Fields -->
+          <div id="change-pwd-fields">
+            <div class="form-group">
+              <label class="form-label" for="pwd-current" data-i18n="currentPwdLabel">Mật khẩu hiện tại *</label>
+              <div class="password-input-wrap">
+                <input type="password" id="pwd-current" class="form-control" placeholder="Nhập mật khẩu hiện tại"
+                  required>
+                <button type="button" class="password-toggle-btn" data-target="pwd-current" title="Hiện mật khẩu"
+                  onclick="togglePasswordVisibility('pwd-current', this, event)">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path
+                      d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24">
+                    </path>
+                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="pwd-new" data-i18n="newPwdLabel">Mật khẩu mới *</label>
+              <div class="password-input-wrap">
+                <input type="password" id="pwd-new" class="form-control" placeholder="Tối thiểu 6 ký tự" minlength="6"
+                  required>
+                <button type="button" class="password-toggle-btn" data-target="pwd-new" title="Hiện mật khẩu"
+                  onclick="togglePasswordVisibility('pwd-new', this, event)">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path
+                      d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24">
+                    </path>
+                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="pwd-confirm" data-i18n="confirmPwdLabel">Xác nhận mật khẩu mới *</label>
+              <div class="password-input-wrap">
+                <input type="password" id="pwd-confirm" class="form-control" placeholder="Nhập lại mật khẩu mới"
+                  minlength="6" required>
+                <button type="button" class="password-toggle-btn" data-target="pwd-confirm" title="Hiện mật khẩu"
+                  onclick="togglePasswordVisibility('pwd-confirm', this, event)">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path
+                      d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24">
+                    </path>
+                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary modal-close-btn" data-i18n="btnClose" onclick="closeAllModals()">Đóng</button>
+          <button type="submit" class="btn btn-primary" id="btn-submit-change-pwd" data-i18n="btnUpdatePwd">Cập Nhật Mật
+            Khẩu</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 3. Modal: Đánh giá tài liệu thang 5 sao (Rating Modal) -->
+  <div class="modal-backdrop" id="modal-rating">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title" data-i18n="modalRatingTitle">Đánh Giá Tài Liệu</h3>
+        <button class="modal-close-btn" aria-label="Đóng" onclick="closeAllModals()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body" style="text-align: center;">
+        <h4 id="rating-doc-title" style="font-size: 1.1rem; color: var(--text-main); margin-bottom: 8px;">Tên tài liệu
+        </h4>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px;">
+          Điểm trung bình hiện tại: <strong id="rating-current-avg" style="color: var(--accent);">5.0 / 5.0</strong>
+        </p>
+
+        <!-- 5 Interactive Stars -->
+        <div class="star-rating-input">
+          <button class="star-btn" data-value="1"></button>
+          <button class="star-btn" data-value="2"></button>
+          <button class="star-btn" data-value="3"></button>
+          <button class="star-btn" data-value="4"></button>
+          <button class="star-btn" data-value="5"></button>
+        </div>
+        <div id="rating-value-label" style="font-weight: 700; color: var(--primary); margin-bottom: 20px;">5 sao (Rất
+          xuất sắc & Hữu ích)</div>
+
+        <div class="form-group" style="text-align: left;">
+          <label class="form-label" for="rating-comment" data-i18n="commentTextPlaceholder">Nhận xét của bạn (không bắt
+            buộc)</label>
+          <textarea id="rating-comment" class="form-control" rows="3"
+            placeholder="Chia sẻ cảm nhận của bạn về tài liệu này..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary modal-close-btn" data-i18n="btnCancel" onclick="closeAllModals()">Hủy</button>
+        <button type="button" class="btn btn-primary" onclick="submitDocRating()" data-i18n="btnSubmitComment">Gửi Đánh
+          Giá</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Xem & Gửi Bình Luận / Đánh Giá Tài Liệu (Document Comments & Reviews) -->
+  <div class="modal-backdrop" id="modal-doc-comments">
+    <div class="modal-box modal-lg">
+      <div class="modal-header">
+        <h3 class="modal-title" style="display: flex; align-items: center; gap: 8px;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+          </svg>
+          <span data-i18n="modalCommentsTitle">Đánh Giá & Phản Hồi Tài Liệu</span>
+        </h3>
+        <button class="modal-close-btn" aria-label="Đóng" onclick="closeAllModals()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body" style="padding-top: 18px;">
+        <input type="hidden" id="comments-modal-doc-id" value="">
+
+        <!-- Top Document Meta Banner -->
+        <div class="comments-doc-header-card">
+          <div class="comments-doc-info">
+            <h4 id="comments-doc-title"
+              style="font-size: 1.08rem; font-weight: 700; color: var(--text-main); margin-bottom: 6px;">Tên tài liệu
+            </h4>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+              <span class="badge badge-primary" id="comments-doc-cat">Địa lí đại cương</span>
+              <span class="badge badge-secondary" id="comments-doc-grade">Lớp 10</span>
+              <span class="badge badge-accent" id="comments-doc-format">PDF</span>
+            </div>
+          </div>
+          <div class="comments-doc-rating-summary">
+            <div class="rating-large-score" id="comments-doc-avg-score">5.0</div>
+            <div class="rating-stars" id="comments-doc-stars-display" style="justify-content: center;">
+
+            </div>
+            <div style="font-size: 0.76rem; color: var(--text-muted); margin-top: 2px;" id="comments-doc-count-label">0
+              bình luận</div>
+          </div>
+        </div>
+
+        <!-- Form Viết bình luận / Đánh giá mới -->
+        <div class="comment-write-box" id="comment-write-box">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <strong style="font-size: 0.95rem; color: var(--text-main); display: flex; align-items: center; gap: 6px;"
+              data-i18n="commentWriteBoxTitle">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon
+                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                </polygon>
+              </svg>
+              Viết đánh giá & bình luận của bạn
+            </strong>
+            <span style="font-size: 0.8rem; color: var(--text-muted);" id="comment-author-name-display">Đăng nhập để
+              bình luận</span>
+          </div>
+
+          <!-- Logged in interactive form -->
+          <div id="comment-logged-in-form" style="display: none;">
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px; flex-wrap: wrap;">
+              <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted);"
+                data-i18n="commentChooseStars">Chọn số sao đánh giá:</span>
+              <div class="star-rating-input inline-star-picker" id="comment-inline-star-picker"
+                style="margin: 0; gap: 6px;">
+                <button type="button" class="star-btn active" data-value="1"
+                  onclick="setCommentRatingStars(1)"></button>
+                <button type="button" class="star-btn active" data-value="2"
+                  onclick="setCommentRatingStars(2)"></button>
+                <button type="button" class="star-btn active" data-value="3"
+                  onclick="setCommentRatingStars(3)"></button>
+                <button type="button" class="star-btn active" data-value="4"
+                  onclick="setCommentRatingStars(4)"></button>
+                <button type="button" class="star-btn active" data-value="5"
+                  onclick="setCommentRatingStars(5)"></button>
+              </div>
+              <span id="comment-star-label" style="font-size: 0.82rem; font-weight: 700; color: var(--primary);">5 sao
+                (Rất xuất sắc)</span>
+            </div>
+
+            <textarea id="comment-input-text" class="form-control" rows="3"
+              data-i18n-placeholder="commentTextPlaceholder"
+              placeholder="Chia sẻ cảm nhận, lời khuyên ôn tập hoặc thắc mắc về tài liệu này..."
+              style="resize: vertical; font-size: 0.9rem;"></textarea>
+            <div style="display: flex; justify-content: flex-end; margin-top: 10px;">
+              <button type="button" class="btn btn-primary" id="btn-submit-doc-comment" onclick="submitDocCommentFromModal()">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="22" y1="2" x2="11" y2="13"></line>
+                  <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                </svg>
+                <span data-i18n="btnSubmitComment">Gửi Bình Luận & Đánh Giá</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Guest Prompt (when not logged in) -->
+          <div id="comment-guest-prompt"
+            style="display: none; padding: 14px; background: rgba(13, 148, 136, 0.06); border: 1px dashed var(--primary); border-radius: var(--radius-md); text-align: center;">
+            <p style="font-size: 0.88rem; color: var(--text-main); margin-bottom: 8px;" data-i18n="commentGuestNotice">
+              <strong>Chỉ tài khoản đã đăng ký / đăng nhập mới có thể đánh giá và viết bình luận.</strong>
+            </p>
+            <button class="btn btn-sm btn-primary" onclick="closeModal('modal-doc-comments'); openModal('modal-login');"
+              data-i18n="commentGuestBtn">
+              Đăng Nhập Ngay Để Bình Luận
+            </button>
+          </div>
+        </div>
+
+        <!-- Section: Danh sách bình luận & phản hồi -->
+        <div class="comments-section-header"
+          style="display: flex; justify-content: space-between; align-items: center; margin: 20px 0 12px;">
+          <h4 style="font-size: 1rem; font-weight: 700; color: var(--text-main);">
+            <span data-i18n="commentsHeader">Tất cả phản hồi & nhận xét</span> (<span
+              id="comments-total-badge">0</span>)
+          </h4>
+          <span style="font-size: 0.78rem; color: var(--text-muted);" data-i18n="adminDeleteCommentNotice">Quản trị viên
+            có quyền xóa bình luận vi phạm</span>
+        </div>
+
+        <div class="comments-list-wrapper" id="comments-list-container">
+          <!-- Rendered dynamically by js/app.js -->
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary modal-close-btn" data-i18n="btnClose" onclick="closeAllModals()">Đóng</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Modal: Xem chi tiết & Tải về (Document Preview Modal) -->
+  <div class="modal-backdrop" id="modal-preview">
+    <div class="modal-box modal-lg">
+      <div class="modal-header">
+        <h3 class="modal-title" id="preview-title" data-i18n="modalPreviewTitle">Xem Chi Tiết Tài Liệu</h3>
+        <button class="modal-close-btn" aria-label="Đóng" onclick="closeAllModals()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px;">
+          <span class="badge badge-primary" id="preview-cat-badge">Địa lí đại cương • Tự nhiên</span>
+          <span class="badge badge-secondary" id="preview-grade-badge">Lớp 10</span>
+          <span class="badge badge-accent" id="preview-format">PDF</span>
+        </div>
+
+        <div
+          style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; background: var(--bg-surface); padding: 14px; border-radius: var(--radius-md); font-size: 0.85rem; margin-bottom: 20px;">
+          <div><strong data-i18n="authorLabel">Tác giả:</strong> <span id="preview-author">Ban Chuyên Môn</span></div>
+          <div><strong data-i18n="dateLabel">Ngày đăng:</strong> <span id="preview-date">2026</span></div>
+          <div><strong data-i18n="sizeLabel">Dung lượng:</strong> <span id="preview-size">3.5 MB</span></div>
+          <div><strong>Lượt tải:</strong> <span id="preview-downloads">1,240</span></div>
+          <div><strong>Đánh giá:</strong> <span id="preview-rating-score"
+              style="color: var(--accent); font-weight: 700;">4.8 / 5.0</span></div>
+        </div>
+
+        <div
+          style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
+          <h4 style="font-size: 1rem; font-weight: 700; margin: 0;" data-i18n="previewExcerptTitle">Trích đoạn &amp; Xem
+            trước nội dung:</h4>
+          <button class="btn btn-sm btn-outline-primary" id="btn-translate-preview-doc"
+            onclick="translatePreviewDocumentWithAi()" title="Dịch tự động nội dung trích đoạn sang ngôn ngữ đang chọn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="2" y1="12" x2="22" y2="12"></line>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+              </path>
+            </svg>
+            <span id="preview-translate-btn-text" data-i18n="btnTranslatePreview"> Dịch nội dung bằng AI</span>
+          </button>
+        </div>
+        <div id="preview-text-content"
+          style="background: white; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 18px; font-size: 0.95rem; line-height: 1.7; color: #334155; max-height: 240px; overflow-y: auto; white-space: pre-line;">
+          Nội dung đang được hiển thị...
+        </div>
+
+        <!-- PDF Embedded Viewer (only shown when PDF file is attached) -->
+        <div id="preview-pdf-section" style="display:none; margin-top: 20px;">
+          <h4
+            style="font-size: 1rem; font-weight: 700; margin-bottom: 10px; display:flex; align-items:center; gap:8px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+            </svg>
+            <span data-i18n="previewPdfOnlineTitle">Xem trực tuyến file PDF:</span>
+          </h4>
+          <iframe id="preview-pdf-iframe" src=""
+            style="width:100%; height:480px; border: 1px solid var(--border-color); border-radius: var(--radius-md); background:#f8f8f8;"
+            allowfullscreen></iframe>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary modal-close-btn" data-i18n="btnClose" onclick="closeAllModals()">Đóng</button>
+        <button type="button" id="preview-open-comments-btn" class="btn btn-secondary"
+          onclick="openCommentsFromPreview()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+          </svg>
+          <span data-i18n="btnViewCommentsFromPreview">Xem Bình Luận & Đánh Giá</span>
+        </button>
+        <button type="button" id="preview-pdf-download-btn" class="btn btn-primary" style="display:none;"
+          onclick="downloadPreviewPdf()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          <span data-i18n="btnDownloadPdf">Tải Xuống PDF</span>
+        </button>
+        <button type="button" id="preview-no-pdf-btn" class="btn btn-outline-primary"
+          onclick="showToast('Tài liệu này chưa có file PDF. Admin chưa đính kèm.', 'info');">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          <span>Chưa có file PDF</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. Modal: Admin CRUD Bài viết Trang chủ (Add/Edit Post) -->
+  <div class="modal-backdrop" id="modal-post-crud">
+    <div class="modal-box modal-lg">
+      <div class="modal-header">
+        <h3 class="modal-title" id="post-modal-title" data-i18n="modalAddPostTitle">Thêm / Chỉnh Sửa Bài Viết</h3>
+        <button class="modal-close-btn" aria-label="Đóng" onclick="closeAllModals()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <form id="form-post-crud" onsubmit="handleSavePost(event)">
+        <input type="hidden" id="post-form-type" value="hshk">
+        <input type="hidden" id="post-form-id" value="">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="post-form-title">Tiêu đề bài viết *</label>
+            <input type="text" id="post-form-title" class="form-control" placeholder="Nhập tiêu đề bài viết..."
+              required>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div class="form-group">
+              <label class="form-label" for="post-form-tag">Thẻ nhãn (Tag)</label>
+              <input type="text" id="post-form-tag" class="form-control"
+                placeholder="Ví dụ: Dự án, Sứ mệnh, Sự kiện...">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="post-form-author">Tác giả / Ban đăng</label>
+              <input type="text" id="post-form-author" class="form-control" placeholder="Ví dụ: Ban Điều Hành HSHK">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="post-form-content">Nội dung chi tiết *</label>
+            <textarea id="post-form-content" class="form-control" rows="6" placeholder="Nhập nội dung bài viết..."
+              required></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary modal-close-btn" data-i18n="btnCancel" onclick="closeAllModals()">Hủy</button>
+          <button type="submit" class="btn btn-primary" data-i18n="btnSubmit">Lưu Bài Viết</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 6. Modal: Admin CRUD Tài liệu (Add/Edit Document with 2-level categories) -->
+  <div class="modal-backdrop" id="modal-doc-crud">
+    <div class="modal-box modal-lg">
+      <div class="modal-header">
+        <h3 class="modal-title" id="doc-modal-title" data-i18n="modalAddDocTitle">Thêm / Chỉnh Sửa Tài Liệu</h3>
+        <button class="modal-close-btn" aria-label="Đóng" onclick="closeAllModals()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <form id="form-doc-crud" onsubmit="handleSaveDocument(event)">
+        <input type="hidden" id="doc-form-id" value="">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="doc-form-title">Tên tiêu đề tài liệu *</label>
+            <input type="text" id="doc-form-title" class="form-control"
+              placeholder="Ví dụ: Chuyên đề Địa lý Tự nhiên Việt Nam..." required>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <!-- Category Level 1 -->
+            <div class="form-group">
+              <label class="form-label" for="doc-form-main-cat">Danh mục chính *</label>
+              <select id="doc-form-main-cat" class="form-control" required>
+                <option value="dai_cuong">Địa lí đại cương</option>
+                <option value="viet_nam">Địa lí Việt Nam</option>
+              </select>
+            </div>
+            <!-- Category Level 2 -->
+            <div class="form-group">
+              <label class="form-label" for="doc-form-sub-cat">Phân nhóm chuyên đề *</label>
+              <select id="doc-form-sub-cat" class="form-control" required>
+                <option value="tu_nhien">Tự nhiên</option>
+                <option value="kinh_te_xa_hoi">Kinh tế - Xã hội</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;">
+            <div class="form-group">
+              <label class="form-label" for="doc-form-grade">Khối lớp</label>
+              <input type="text" id="doc-form-grade" class="form-control" placeholder="Ví dụ: Lớp 10, THCS, Nâng cao">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="doc-form-format">Định dạng file</label>
+              <select id="doc-form-format" class="form-control">
+                <option value="PDF">PDF</option>
+                <option value="DOCX">DOCX</option>
+                <option value="SLIDES">SLIDES (PPT)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="doc-form-size">Dung lượng file</label>
+              <input type="text" id="doc-form-size" class="form-control" placeholder="Ví dụ: 3.5 MB">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="doc-form-author">Tác giả / Đơn vị biên soạn</label>
+            <input type="text" id="doc-form-author" class="form-control"
+              placeholder="Ví dụ: High School Help Kit Geography Lab">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="doc-form-desc">Mô tả tóm tắt tài liệu *</label>
+            <textarea id="doc-form-desc" class="form-control" rows="3"
+              placeholder="Tóm tắt ngắn gọn các kiến thức trọng tâm trong tài liệu..." required></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="doc-form-preview">Nội dung trích đoạn xem trước</label>
+            <textarea id="doc-form-preview" class="form-control" rows="4"
+              placeholder="Nhập một đoạn nội dung mẫu để người đọc xem trước..."></textarea>
+          </div>
+
+          <!-- Attachment Type Selection -->
+          <div class="form-group">
+            <label class="form-label">Hình thức đính kèm tài liệu *</label>
+            <div style="display: flex; gap: 24px; margin-bottom: 12px; flex-wrap: wrap;">
+              <label
+                style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 600; color: var(--text-main);">
+                <input type="radio" name="doc-attach-type" id="doc-attach-type-file" value="file" checked
+                  onchange="toggleDocAttachType('file')">
+                <span>Tải File PDF lên (Tối đa 1 MB)</span>
+              </label>
+              <label
+                style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 600; color: var(--text-main);">
+                <input type="radio" name="doc-attach-type" id="doc-attach-type-link" value="link"
+                  onchange="toggleDocAttachType('link')">
+                <span>Gắn Link trực tiếp (Google Drive / DOCX / PDF Online)</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- 1. PDF Upload Zone (Limited to 1 MB) -->
+          <div class="form-group" id="doc-attach-file-section">
+            <label class="form-label">Đính kèm file PDF tài liệu (Tối đa 1 MB)</label>
+            <div class="pdf-upload-zone" id="pdf-upload-zone"
+              onclick="document.getElementById('doc-pdf-file-input').click()">
+              <div class="pdf-upload-icon">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="16" y1="13" x2="8" y2="13"></line>
+                  <line x1="16" y1="17" x2="8" y2="17"></line>
+                  <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+              </div>
+              <div class="pdf-upload-text">
+                <strong>Kéo & thả file PDF vào đây</strong><br>
+                <span>hoặc nhấn để chọn file từ máy tính</span>
+              </div>
+              <div class="pdf-upload-hint">Chỉ hỗ trợ file .PDF — Giới hạn tối đa 1 MB</div>
+            </div>
+            <input type="file" id="doc-pdf-file-input" accept=".pdf,application/pdf" style="display:none;">
+            <!-- File info preview after selection -->
+            <div id="pdf-file-info" class="pdf-file-info" style="display:none;">
+              <div class="pdf-file-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                </svg>
+              </div>
+              <div class="pdf-file-details">
+                <span id="pdf-file-name" class="pdf-file-name">document.pdf</span>
+                <span id="pdf-file-size" class="pdf-file-size">0 KB</span>
+              </div>
+              <button type="button" class="pdf-clear-btn" onclick="clearPdfUpload()" title="Xóa file đã chọn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
+            </div>
+            <!-- Existing PDF indicator (when editing) -->
+            <div id="pdf-existing-info" class="pdf-existing-info" style="display:none;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              <span>Tài liệu đã có file PDF đính kèm. Chọn file mới để thay thế.</span>
+            </div>
+          </div>
+
+          <!-- 2. Direct Link Section -->
+          <div class="form-group" id="doc-attach-link-section" style="display: none;">
+            <label class="form-label" for="doc-form-external-url">Đường link tài liệu trực tiếp (URL) *</label>
+            <input type="url" id="doc-form-external-url" class="form-control"
+              placeholder="Ví dụ: https://drive.google.com/file/d/... hoặc link OneDrive / Dropbox / Web">
+            <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 6px;">
+              Hỗ trợ link Google Drive, Microsoft OneDrive, Dropbox, file DOCX hoặc link PDF trực tuyến.
+            </div>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary modal-close-btn" data-i18n="btnCancel" onclick="closeAllModals()">Hủy</button>
+          <button type="submit" class="btn btn-primary" data-i18n="btnSaveDoc">Lưu Tài Liệu</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 7. Modal: Admin Edit Contact Info -->
+  <div class="modal-backdrop" id="modal-contact-crud">
+    <div class="modal-box modal-lg">
+      <div class="modal-header">
+        <h3 class="modal-title" data-i18n="modalEditContactTitle">Chỉnh Sửa Thông Tin Liên Hệ</h3>
+        <button class="modal-close-btn" aria-label="Đóng" onclick="closeAllModals()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <form id="form-contact-crud">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="contact-edit-project">Tên dự án</label>
+            <input type="text" id="contact-edit-project" class="form-control" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="contact-edit-slogan">Khẩu hiệu / Sứ mệnh</label>
+            <input type="text" id="contact-edit-slogan" class="form-control" required>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div class="form-group">
+              <label class="form-label" for="contact-edit-email">Địa chỉ Gmail</label>
+              <input type="email" id="contact-edit-email" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="contact-edit-hotline">Hotline</label>
+              <input type="text" id="contact-edit-hotline" class="form-control" required>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div class="form-group">
+              <label class="form-label" for="contact-edit-fanpage-name">Tên Fanpage</label>
+              <input type="text" id="contact-edit-fanpage-name" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="contact-edit-fanpage-url">Đường link Fanpage</label>
+              <input type="url" id="contact-edit-fanpage-url" class="form-control" required>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div class="form-group">
+              <label class="form-label" for="contact-edit-group-name">Tên Group học tập</label>
+              <input type="text" id="contact-edit-group-name" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="contact-edit-group-url">Đường link Group</label>
+              <input type="url" id="contact-edit-group-url" class="form-control" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="contact-edit-address">Địa chỉ văn phòng</label>
+            <input type="text" id="contact-edit-address" class="form-control" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="contact-edit-hours">Thời gian làm việc / Trực tuyến</label>
+            <input type="text" id="contact-edit-hours" class="form-control" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary modal-close-btn" data-i18n="btnCancel" onclick="closeAllModals()">Hủy</button>
+          <button type="submit" class="btn btn-primary" data-i18n="btnSaveDoc">Lưu Thay Đổi</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 8. Modal: Super Admin Add New Admin -->
+  <div class="modal-backdrop" id="modal-add-admin">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title" data-i18n="modalAddAdminTitle">Thêm Quản Trị Viên (Admin)</h3>
+        <button class="modal-close-btn" aria-label="Đóng" onclick="closeAllModals()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <form id="form-add-admin">
+        <div class="modal-body">
+          <div
+            style="background: rgba(13, 148, 136, 0.08); border: 1px solid rgba(13, 148, 136, 0.2); border-radius: 8px; padding: 12px 14px; margin-bottom: 18px; font-size: 0.88rem; color: var(--text-main);">
+            <strong>Quyền hạn Super Admin</strong>: Tạo tài khoản Quản trị viên mới hoặc cấp quyền Admin cho Gmail hiện
+            có. Admin mới sẽ có quyền đăng tải và quản lý tài liệu.
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="add-admin-name">Họ và tên Quản trị viên *</label>
+            <input type="text" id="add-admin-name" class="form-control" placeholder="Ví dụ: Ban Quản Trị HSHK" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="add-admin-email">Địa chỉ Gmail Admin *</label>
+            <input type="email" id="add-admin-email" class="form-control" placeholder="Ví dụ: admin.geography@gmail.com"
+              required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="add-admin-password">Mật khẩu tài khoản *</label>
+            <div class="password-input-wrap">
+              <input type="password" id="add-admin-password" class="form-control" placeholder="Tối thiểu 6 ký tự"
+                minlength="6" required>
+              <button type="button" class="password-toggle-btn" data-target="add-admin-password" title="Hiện mật khẩu"
+                onclick="togglePasswordVisibility('add-admin-password', this, event)">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path
+                    d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24">
+                  </path>
+                  <line x1="1" y1="1" x2="23" y2="23"></line>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary modal-close-btn" data-i18n="btnCancel" onclick="closeAllModals()">Hủy</button>
+          <button type="submit" class="btn btn-primary" data-i18n="btnSubmit">Xác Nhận Thêm Admin</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 9. Modal: Admin Phản hồi Confession / Câu hỏi -->
+  <div class="modal-backdrop" id="modal-reply-confession">
+    <div class="modal-box modal-lg">
+      <div class="modal-header">
+        <h3 class="modal-title">Phản Hồi Confession / Hỏi Đáp</h3>
+        <button class="modal-close-btn" aria-label="Đóng" onclick="closeAllModals()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <form id="form-reply-confession">
+        <input type="hidden" id="reply-cfs-id" value="">
+        <div class="modal-body">
+          <!-- Student Question Snapshot -->
+          <div
+            style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 16px; margin-bottom: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <span id="reply-cfs-sender" style="font-weight: 700; color: var(--primary);">Người gửi</span>
+              <span id="reply-cfs-date" style="font-size: 0.8rem; color: var(--text-muted);">Ngày gửi</span>
+            </div>
+            <h4 id="reply-cfs-subject"
+              style="font-size: 1rem; font-weight: 700; color: var(--text-main); margin-bottom: 6px;">Tiêu đề</h4>
+            <p id="reply-cfs-message"
+              style="font-size: 0.92rem; color: #475569; line-height: 1.6; white-space: pre-line; margin: 0;"></p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="reply-cfs-author">Tên Admin phản hồi *</label>
+            <input type="text" id="reply-cfs-author" class="form-control" placeholder="Ví dụ: Trần Huy Vũ (Admin)"
+              required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="reply-cfs-text">Nội dung câu trả lời / Lời khuyên *</label>
+            <textarea id="reply-cfs-text" class="form-control" rows="5"
+              placeholder="Nhập câu trả lời chi tiết và tận tình gửi đến học sinh..." required></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary modal-close-btn" data-i18n="btnCancel" onclick="closeAllModals()">Hủy</button>
+          <button type="submit" class="btn btn-primary" data-i18n="btnSubmit">Gửi &amp; Công Khai Câu Trả Lời</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Xác Thực Mã Khắc Phục Sự Cố (Chế độ Bảo trì) -->
+  <div class="modal-backdrop" id="modal-maintenance-troubleshoot">
+    <div class="modal-box modal-md" style="border-top: 4px solid #f59e0b;">
+      <div class="modal-header" style="border-bottom-color: rgba(245, 158, 11, 0.2);">
+        <h3 class="modal-title" style="display: flex; align-items: center; gap: 8px; color: #b45309;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          </svg>
+          <span>Khắc Phục Sự Cố Hệ Thống</span>
+        </h3>
+        <button class="modal-close-btn" aria-label="Đóng" onclick="closeAllModals()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <form id="form-maintenance-troubleshoot" onsubmit="submitMaintenanceTroubleshoot(event)">
+        <div class="modal-body">
+          <div style="background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: var(--radius-md); padding: 14px; margin-bottom: 18px; font-size: 0.88rem; line-height: 1.6; color: #92400e;">
+            <p style="margin: 0; font-weight: 500;">
+              🛡️ Cổng khôi phục và xử lý sự cố dành riêng cho <strong>Nhà sáng tạo</strong> và <strong>Quản trị viên</strong>. Vui lòng nhập mã ủy quyền để mở cổng đăng nhập quản trị.
+            </p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="maint-troubleshoot-code" style="font-weight: 700;">
+              Mã bảo mật khắc phục sự cố *
+            </label>
+            <div class="password-input-wrapper">
+              <input type="password" id="maint-troubleshoot-code" class="form-control"
+                placeholder="Nhập mã xác thực để tiếp tục..." required autocomplete="off">
+              <button type="button" class="password-toggle-btn" data-target="maint-troubleshoot-code" title="Hiện mã"
+                onclick="togglePasswordVisibility('maint-troubleshoot-code', this, event)">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+              </button>
+            </div>
+            <small style="color: var(--text-muted); font-size: 0.78rem; margin-top: 6px; display: block;">
+              Mã được cấp riêng cho Nhà sáng tạo và các Quản trị viên dự án.
+            </small>
+          </div>
+        </div>
+        <div class="modal-footer" style="display: flex; justify-content: flex-end; gap: 10px;">
+          <button type="button" class="btn btn-secondary" onclick="closeAllModals()">Hủy Bỏ</button>
+          <button type="submit" class="btn btn-warning" id="btn-troubleshoot-submit" style="font-weight: 700;">
+            Xác Thực &amp; Mở Đăng Nhập
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Xác nhận Bật / Tắt Chế Độ Bảo Trì -->
+  <div class="modal-backdrop" id="modal-maintenance-toggle">
+    <div class="modal-box modal-md">
+      <div class="modal-header" style="border-bottom-color: #f59e0b;">
+        <h3 class="modal-title" style="display: flex; align-items: center; gap: 8px; color: #b45309;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path
+              d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z">
+            </path>
+          </svg>
+          <span id="maint-modal-title">Xác Nhận Chế Độ Bảo Trì</span>
+        </h3>
+        <button class="modal-close-btn" aria-label="Đóng" onclick="closeAllModals()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <form id="form-maintenance-toggle" onsubmit="submitMaintenanceToggle(event)">
+        <div class="modal-body">
+          <div id="maint-modal-alert-box"
+            style="background: rgba(245, 158, 11, 0.1); border: 1px solid #f59e0b; border-radius: var(--radius-md); padding: 14px; margin-bottom: 18px; font-size: 0.88rem; line-height: 1.6; color: #92400e;">
+            <p id="maint-modal-desc" style="margin: 0;">
+              Khi BẬT bảo trì: Toàn bộ thành viên sẽ chỉ sử dụng được trang chủ, bài viết và Trợ lý AI sẽ tạm khóa.
+            </p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="maint-input-pwd">
+              Mật khẩu bảo trì (do Nhà sáng tạo cấp) *
+            </label>
+            <div class="password-input-wrapper">
+              <input type="password" id="maint-input-pwd" class="form-control"
+                placeholder="Nhập mật khẩu bảo trì để xác thực..." required autocomplete="current-password">
+              <button type="button" class="password-toggle-btn" data-target="maint-input-pwd" title="Hiện mật khẩu"
+                onclick="togglePasswordVisibility('maint-input-pwd', this, event)">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+              </button>
+            </div>
+            <small style="color: var(--text-muted); font-size: 0.78rem; margin-top: 4px; display: block;">
+              Thao tác này yêu cầu nhập đúng mật khẩu bảo trì của Nhà sáng tạo dự án.
+            </small>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary modal-close-btn" data-i18n="btnCancel" onclick="closeAllModals()">Hủy</button>
+          <button type="submit" class="btn btn-primary" id="btn-maint-confirm-submit">
+            Xác Nhận Bật / Tắt Bảo Trì
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Đổi Mật Khẩu Chế Độ Bảo Trì (Dành riêng cho Nhà Sáng Tạo / Super Admin) -->
+  <div class="modal-backdrop" id="modal-change-maintenance-pwd">
+    <div class="modal-box modal-md">
+      <div class="modal-header">
+        <h3 class="modal-title" style="display: flex; align-items: center; gap: 8px;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+          <span>Đổi Mật Khẩu Chế Độ Bảo Trì</span>
+        </h3>
+        <button class="modal-close-btn" aria-label="Đóng" onclick="closeAllModals()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <form id="form-change-maintenance-pwd" onsubmit="submitChangeMaintenancePwd(event)">
+        <div class="modal-body">
+          <div
+            style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 12px; margin-bottom: 16px; font-size: 0.85rem; color: var(--text-muted);">
+            <strong>Đặc quyền Nhà sáng tạo:</strong> Mật khẩu này được dùng cho các Quản trị viên (đã được bạn ủy quyền)
+            để kích hoạt hoặc tắt chế độ bảo trì khi cần thiết.
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="new-maint-pwd">Mật khẩu bảo trì mới *</label>
+            <div class="password-input-wrapper">
+              <input type="password" id="new-maint-pwd" class="form-control" placeholder="Tối thiểu 6 ký tự"
+                minlength="6" required>
+              <button type="button" class="password-toggle-btn" data-target="new-maint-pwd" title="Hiện mật khẩu"
+                onclick="togglePasswordVisibility('new-maint-pwd', this, event)">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="confirm-new-maint-pwd">Xác nhận mật khẩu mới *</label>
+            <div class="password-input-wrapper">
+              <input type="password" id="confirm-new-maint-pwd" class="form-control" placeholder="Nhập lại mật khẩu mới"
+                minlength="6" required>
+              <button type="button" class="password-toggle-btn" data-target="confirm-new-maint-pwd"
+                title="Hiện mật khẩu" onclick="togglePasswordVisibility('confirm-new-maint-pwd', this, event)">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary modal-close-btn" data-i18n="btnCancel" onclick="closeAllModals()">Hủy</button>
+          <button type="submit" class="btn btn-primary">Lưu Mật Khẩu Bảo Trì</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Cài Đặt Bộ Đếm Thời Gian Thi (Admin Only) -->
+  <div class="modal-backdrop" id="modal-countdown-config">
+    <div class="modal-box modal-md">
+      <div class="modal-header">
+        <h3 class="modal-title" style="display: flex; align-items: center; gap: 8px;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+          <span data-i18n="modalCountdownTitle">Cài Đặt Bộ Đếm Thời Gian Thi</span>
+        </h3>
+        <button class="modal-close-btn" aria-label="Đóng" onclick="closeAllModals()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <form id="form-countdown-config" onsubmit="submitCountdownConfig(event)">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="countdown-input-name" data-i18n="countdownExamNameLabel">Tên kỳ thi / Sự kiện
+              mục tiêu *</label>
+            <input type="text" id="countdown-input-name" class="form-control"
+              placeholder="Ví dụ: Kỳ Thi Tuyển Sinh Vào Lớp 10 Năm 2027" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="countdown-input-datetime" data-i18n="countdownTargetTimeLabel">Thời gian diễn
+              ra kỳ thi *</label>
+            <input type="datetime-local" id="countdown-input-datetime" class="form-control" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="countdown-input-slogan" data-i18n="countdownSloganLabel">Lời chúc / Thông
+              điệp truyền cảm hứng</label>
+            <textarea id="countdown-input-slogan" class="form-control" rows="3"
+              placeholder="Ví dụ: Hãy nỗ lực từng ngày, cánh cổng trường Chuyên và THPT mơ ước đang rộng mở chờ đón bạn!"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary modal-close-btn" data-i18n="btnCancel" onclick="closeAllModals()">Hủy</button>
+          <button type="submit" class="btn btn-primary" id="btn-save-countdown">Lưu Bộ Đếm</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Xác Minh Robot (Anti-Bot Verification Challenge) -->
+  <div class="modal-backdrop" id="modal-robot-verification">
+    <div class="modal-box modal-md"
+      style="border: 2px solid #0d9488; box-shadow: 0 20px 40px -10px rgba(13, 148, 136, 0.4);">
+      <div class="modal-header"
+        style="background: linear-gradient(135deg, #0f172a 0%, #134e4a 100%); color: #ffffff; border-bottom: 1px solid rgba(255,255,255,0.1);">
+        <h3 class="modal-title" style="display: flex; align-items: center; gap: 10px; color: #ffffff;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2dd4bf" stroke-width="2.2">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+          <span style="font-weight: 800; font-size: 1.15rem;">Bạn có phải là robot không?</span>
+        </h3>
+        <button class="modal-close-btn" style="color: #ffffff;" aria-label="Đóng" onclick="cancelRobotVerification()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body" style="padding: 24px;" data-token="M%@vs2hShK">
+        <p style="color: var(--text-main); font-size: 0.95rem; margin-bottom: 12px; line-height: 1.5; text-align: center;">
+          Để bảo vệ hệ thống khỏi spam bot, vui lòng chọn câu trả lời chính xác để xác nhận bạn là con người:
+        </p>
+
+        <!-- 3 Interactive Choice Buttons in Modal -->
+        <div class="robot-choice-grid">
+          <button type="button" class="robot-choice-btn choice-robot" onclick="handleRobotVerificationChoice('yes')" title="Chọn: Có">
+            <span class="robot-choice-icon">🤖</span>
+            <span class="robot-choice-label">Có</span>
+            <span class="robot-choice-sub">Tôi là Robot</span>
+          </button>
+
+          <button type="button" class="robot-choice-btn choice-human" onclick="handleRobotVerificationChoice('no')" title="Chọn: Không">
+            <span class="robot-choice-icon">👤</span>
+            <span class="robot-choice-label">Không</span>
+            <span class="robot-choice-sub">Tôi là con người</span>
+          </button>
+
+          <button type="button" class="robot-choice-btn choice-robot" onclick="handleRobotVerificationChoice('definitely_yes')" title="Chọn: Chắc chắn có">
+            <span class="robot-choice-icon">🦾</span>
+            <span class="robot-choice-label">Chắc chắn có</span>
+            <span class="robot-choice-sub">Chắc chắn là Robot</span>
+          </button>
+        </div>
+      </div>
+      <div class="modal-footer" style="padding: 14px 24px; background: var(--bg-surface); justify-content: center;">
+        <button type="button" class="btn btn-secondary" onclick="cancelRobotVerification()">Quay Lại / Hủy</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Quản Trị Viên Đặt Lại Mật Khẩu Thành Viên -->
+  <div class="modal-backdrop" id="modal-admin-reset-pwd">
+    <div class="modal-box modal-md">
+      <div class="modal-header">
+        <h3 class="modal-title" style="display: flex; align-items: center; gap: 8px;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+          <span>Đặt Lại Mật Khẩu Thành Viên</span>
+        </h3>
+        <button class="modal-close-btn" aria-label="Đóng" onclick="closeModal('modal-admin-reset-pwd')">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <form id="form-admin-reset-pwd" onsubmit="handleAdminResetPasswordSubmit(event)">
+        <input type="hidden" id="admin-reset-target-id" value="">
+        <div class="modal-body">
+          <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 12px 14px; margin-bottom: 16px; display: flex; align-items: center; gap: 12px;">
+            <div class="user-avatar" id="admin-reset-user-avatar" style="width: 38px; height: 38px; font-size: 0.9rem;">U</div>
+            <div>
+              <div style="font-weight: 700; color: var(--text-main); font-size: 0.95rem;" id="admin-reset-user-name">Tên thành viên</div>
+              <div style="font-size: 0.8rem; color: var(--text-muted); font-family: monospace;" id="admin-reset-user-email">email@example.com</div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <label class="form-label" for="admin-reset-new-pwd" style="margin-bottom: 0;">Mật khẩu mới *</label>
+              <button type="button" class="btn btn-sm btn-ghost" style="padding: 2px 8px; font-size: 0.78rem; color: var(--primary);" onclick="generateRandomPasswordForAdminReset()">
+                Tạo ngẫu nhiên
+              </button>
+            </div>
+            <div class="password-input-wrap">
+              <input type="text" id="admin-reset-new-pwd" class="form-control" placeholder="Tối thiểu 6 ký tự" minlength="6" required style="font-family: monospace; font-size: 0.95rem;">
+              <button type="button" class="btn btn-icon btn-sm btn-ghost" onclick="copyAdminResetPassword()" title="Sao chép mật khẩu">
+                📋
+              </button>
+            </div>
+            <small style="color: var(--text-muted); font-size: 0.8rem; margin-top: 6px; display: block;">
+              Mật khẩu mới sẽ được cập nhật và đồng bộ ngay lập tức cho thành viên này.
+            </small>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-admin-reset-pwd')">Hủy</button>
+          <button type="submit" class="btn btn-primary" id="btn-submit-admin-reset-pwd">Lưu Mật Khẩu Mới</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: 2D Dino Runner Mini-Game -->
+  <div class="modal-backdrop" id="modal-dino-game" style="z-index: 10000002;">
+    <div class="modal-box modal-lg dino-modal-box dino-modal-card">
+      <div class="modal-header dino-modal-header">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div class="dino-header-icon" style="background: linear-gradient(135deg, #0d9488, #059669); color: white; width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+          </div>
+          <div>
+            <h3 class="modal-title" style="margin: 0; font-size: 1.2rem; font-family: 'Space Grotesk', sans-serif;" data-i18n="dinoGameModalTitle">Trò Chơi 2D Khủng Long (Dino Runner)</h3>
+            <div style="font-size: 0.78rem; color: var(--text-muted);" data-i18n="dinoGameModalSub">Nhấn Phím Cách (Space) / Mũi tên Lên / Chạm màn hình để Nhảy</div>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <button type="button" class="btn-icon btn-sm" id="btn-dino-mute" onclick="toggleDinoAudio()" title="Bật/Tắt âm thanh" style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 6px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+            </svg>
+          </button>
+          <button type="button" class="btn-close" onclick="closeDinoGameModal()" title="Đóng trò chơi">&times;</button>
+        </div>
+      </div>
+      <div class="modal-body dino-modal-body" style="padding: 16px 20px 20px; text-align: center;">
+        <div class="dino-game-wrapper" id="dino-game-container">
+          <canvas id="dino-game-canvas"></canvas>
+        </div>
+        <div class="dino-controls-bar">
+          <div class="dino-score-badge">
+            <span><span data-i18n="dinoScoreLabel">Điểm:</span> <strong id="dino-current-score" style="color: var(--primary);">00000</strong></span>
+            <span style="margin: 0 10px; color: var(--border-color);">|</span>
+            <span><span data-i18n="dinoHighScoreLabel">Kỷ lục:</span> <strong id="dino-best-score" style="color: #f59e0b;">00000</strong></span>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button type="button" class="btn btn-sm btn-primary" onclick="restartDinoGame()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="1 4 1 10 7 10"></polyline>
+                <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+              </svg>
+              <span data-i18n="dinoBtnRestart">Chơi lại (Space)</span>
+            </button>
+            <button type="button" class="btn btn-sm btn-secondary" onclick="closeDinoGameModal()" data-i18n="dinoBtnClose">Đóng</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Nhập Thông Tin Thí Sinh Khảo Sát / Thi Nhanh (Guest Entry) -->
+  <div class="modal-backdrop" id="modal-guest-exam-entry" style="z-index: 10000015;">
+    <div class="modal-box" style="max-width: 480px;">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div style="width: 36px; height: 36px; border-radius: 8px; background: rgba(13, 148, 136, 0.15); color: var(--primary); display: flex; align-items: center; justify-content: center;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div>
+            <h3 class="modal-title" style="margin: 0; font-size: 1.15rem;">Thông Tin Thí Sinh</h3>
+            <span style="font-size: 0.78rem; color: var(--text-muted);">Vào phòng thi: <strong id="guest-exam-title">Bài Kiểm Tra</strong></span>
+          </div>
+        </div>
+        <button type="button" class="btn-close" onclick="closeModal('modal-guest-exam-entry')">&times;</button>
+      </div>
+      <form onsubmit="handleGuestExamSubmit(event)">
+        <div class="modal-body" style="padding: 16px 20px;">
+          <div style="margin-bottom: 14px; padding: 10px 14px; border-radius: 8px; background: rgba(13, 148, 136, 0.08); border: 1px solid rgba(13, 148, 136, 0.2); font-size: 0.82rem; color: var(--text-main); display: flex; justify-content: space-between;">
+            <span>Mã bài: <strong id="guest-exam-code" style="color: var(--primary);">---</strong></span>
+            <span>Thời gian: <strong id="guest-exam-duration">15 phút</strong></span>
+          </div>
+          <div class="form-group" style="margin-bottom: 12px;">
+            <label class="form-label" style="font-weight: 600;">Họ và Tên thí sinh / Người khảo sát *</label>
+            <input type="text" id="guest-exam-student-name" class="form-control" placeholder="Ví dụ: Nguyễn Văn An" required>
+          </div>
+          <div class="form-group" style="margin-bottom: 12px;">
+            <label class="form-label" style="font-weight: 600;">Lớp / Trường học (Tùy chọn)</label>
+            <input type="text" id="guest-exam-student-class" class="form-control" placeholder="Ví dụ: 10A1 - THPT Chuyên">
+          </div>
+          <div class="form-group" style="margin-bottom: 12px;">
+            <label class="form-label" style="font-weight: 600;">Email hoặc SĐT liên hệ (Tùy chọn)</label>
+            <input type="text" id="guest-exam-student-email" class="form-control" placeholder="email@gmail.com">
+          </div>
+          <div style="font-size: 0.78rem; color: var(--text-muted); line-height: 1.4;">
+            💡 <em>Bạn cũng có thể <a href="javascript:void(0)" onclick="closeModal('modal-guest-exam-entry'); openModal('modal-login');" style="color: var(--primary); text-decoration: underline; font-weight: 600;">Đăng nhập tài khoản</a> để lưu kết quả bài thi vào hồ sơ cá nhân.</em>
+          </div>
+        </div>
+        <div class="modal-footer" style="padding: 12px 20px;">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-guest-exam-entry')">Hủy</button>
+          <button type="submit" class="btn btn-primary" id="btn-confirm-guest-exam">Bắt Đầu Làm Bài</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ====================================================================
+       1. MODAL PHÒNG THI & LÀM BÀI KIỂM TRA (KIOSK EXAM ROOM)
+       ==================================================================== -->
+  <div class="modal-backdrop exam-fullscreen-backdrop" id="modal-exam-room" style="z-index: 10000010;">
+    <div class="modal-box exam-room-box">
+      <!-- Exam Room Top Header -->
+      <div class="exam-room-header">
+        <div class="exam-header-left">
+          <span class="exam-status-tag" id="exam-mode-badge">Đang tải...</span>
+          <h2 class="exam-room-title" id="exam-room-title">Bài Kiểm Tra</h2>
+          <span class="exam-code-pill" id="exam-room-code-badge">MÃ: ---</span>
+        </div>
+
+        <!-- Real-time Exam Countdown Timer -->
+        <div class="exam-timer-card" id="exam-timer-card">
+          <div class="exam-timer-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 16 14"/>
+            </svg>
+          </div>
+          <div class="exam-timer-info">
+            <span class="exam-timer-label">THỜI GIAN CÒN LẠI</span>
+            <span class="exam-timer-value" id="exam-timer-display">00:00</span>
+          </div>
+        </div>
+
+        <div class="exam-header-right">
+          <!-- Browser Kiosk Lock Indicator -->
+          <div class="exam-lock-pill" id="exam-lock-status-pill" style="display: none;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <span>Khóa Trình Duyệt: BẬT</span>
+          </div>
+          <button type="button" class="btn btn-sm btn-danger btn-exit-exam" onclick="confirmExitExam()">Thoát</button>
+        </div>
+      </div>
+
+      <!-- Exam Violation Banner (Shown when user leaves tab) -->
+      <div class="exam-violation-alert" id="exam-violation-alert" style="display: none;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <div class="exam-violation-text">
+          <strong>CẢNH BẢO VI PHẠM KHÓA TRÌNH DUYỆT!</strong>
+          <span id="exam-violation-msg">Bạn vừa rời khỏi màn hình làm bài. Hành vi này đã được ghi lại (Lần <strong id="exam-violation-count">1</strong>) và sẽ được báo cáo tới Quản trị viên!</span>
+        </div>
+        <button type="button" class="btn btn-sm btn-warning" onclick="dismissViolationAlert()">Tiếp tục làm bài</button>
+      </div>
+
+      <!-- Exam Content Body -->
+      <div class="exam-room-body">
+        <!-- Question / Prompt Section -->
+        <div class="exam-question-panel">
+          <div class="exam-section-label">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            <span>NỘI DUNG ĐỀ BÀI KIỂM TRA</span>
+          </div>
+          <div class="exam-question-content" id="exam-question-content">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+        <!-- Student Answer Writing Section (Shown if mode === 'view_and_submit') -->
+        <div class="exam-answer-panel" id="exam-answer-panel">
+          <div class="exam-section-label">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+            <span>BÀI LÀM CỦA THÍ SINH</span>
+            <span class="exam-autosave-indicator" id="exam-autosave-indicator">● Đã lưu nháp tự động</span>
+          </div>
+          <textarea id="exam-student-answers" class="exam-student-textarea" placeholder="Nhập câu trả lời / lời giải chi tiết của bạn vào đây..." spellcheck="false" oninput="handleExamAnswerInput()"></textarea>
+          <div class="exam-answer-footer">
+            <span class="exam-word-count" id="exam-word-count">0 từ • 0 ký tự</span>
+            <span style="font-size: 0.78rem; color: var(--text-muted);">Thí sinh: <strong id="exam-student-name">Học sinh</strong> (<span id="exam-student-email">email</span>)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Exam Room Footer Action Bar -->
+      <div class="exam-room-footer">
+        <div class="exam-footer-hint">
+          <span>💡 <em>Hãy kiểm tra kỹ bài làm trước khi nộp. Khi hết giờ, bài làm sẽ tự động được gửi đi!</em></span>
+        </div>
+        <div class="exam-footer-btns">
+          <button type="button" class="btn btn-secondary" onclick="confirmExitExam()">Tạm Dừng / Thoát</button>
+          <button type="button" class="btn btn-primary btn-submit-exam" id="btn-submit-exam-action" onclick="submitStudentExam()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>NỘP BÀI KIỂM TRA</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====================================================================
+       2. MODAL TẠO BÀI KIỂM TRA MỚI (DÀNH CHO ADMIN / DEVELOPER)
+       ==================================================================== -->
+  <div class="modal-backdrop" id="modal-exam-create" style="z-index: 10000005;">
+    <div class="modal-box modal-lg">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div style="width: 36px; height: 36px; border-radius: 8px; background: linear-gradient(135deg, #0d9488, #2563eb); color: white; display: flex; align-items: center; justify-content: center;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </div>
+          <div>
+            <h3 class="modal-title" style="margin: 0; font-family: 'Space Grotesk', sans-serif;">Đăng Bài Kiểm Tra Mới</h3>
+            <span style="font-size: 0.78rem; color: var(--text-muted);">Hệ thống tạo phòng thi kèm mã bảo mật & giám sát chống gian lận</span>
+          </div>
+        </div>
+        <button type="button" class="btn-close" onclick="closeModal('modal-exam-create')">&times;</button>
+      </div>
+
+      <form id="form-create-exam" onsubmit="handleCreateExamSubmit(event)">
+        <div class="modal-body">
+          <div class="form-row" style="display: grid; grid-template-columns: 2fr 1fr; gap: 14px;">
+            <div class="form-group">
+              <label class="form-label">Tên / Tiêu đề bài kiểm tra *</label>
+              <input type="text" id="exam-create-title" class="form-control" placeholder="Ví dụ: Kiểm tra 15 phút Địa lý Tự nhiên Lớp 10" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Mã bài kiểm tra (BẮT BUỘC) *</label>
+              <div>
+                <input type="text" id="exam-create-code" class="form-control" placeholder="Ví dụ: GEO10-K1" style="text-transform: uppercase; font-weight: 700; letter-spacing: 1px;" required>
+              </div>
+              <small style="font-size: 0.75rem; color: var(--text-muted);">Mã học sinh phải nhập mới mở được bài.</small>
+            </div>
+          </div>
+
+          <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 10px;">
+            <div class="form-group">
+              <label class="form-label">Thời gian làm bài quy định (Phút) *</label>
+              <input type="number" id="exam-create-duration" class="form-control" min="1" max="180" value="15" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Chế độ bài kiểm tra *</label>
+              <select id="exam-create-mode" class="form-control" required>
+                <option value="view_and_submit">Xem đề và nộp bài làm ở ô bên dưới</option>
+                <option value="view_only">Chỉ xem đề (không thu bài trực tuyến)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Exam Browser Kiosk Lock Toggle -->
+          <div class="exam-lock-config-card" style="margin-top: 12px; padding: 14px 16px; border-radius: 10px; background: rgba(239, 68, 68, 0.06); border: 1.5px dashed rgba(239, 68, 68, 0.35); display: flex; align-items: center; justify-content: space-between; gap: 14px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 38px; height: 38px; border-radius: 8px; background: rgba(239, 68, 68, 0.15); color: #ef4444; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              </div>
+              <div>
+                <strong style="color: #b91c1c; font-size: 0.92rem;">Cơ chế Khóa Trình Duyệt (Kiosk Lock)</strong>
+                <p style="margin: 0; font-size: 0.78rem; color: var(--text-muted);">Yêu cầu toàn màn hình, phát hiện chuyển tab/thoát trình duyệt và báo cáo về Quản trị viên.</p>
+              </div>
+            </div>
+            <label class="switch-toggle" style="margin: 0;">
+              <input type="checkbox" id="exam-create-lock-browser" checked>
+              <span class="switch-slider"></span>
+            </label>
+          </div>
+
+          <div class="form-group" style="margin-top: 14px;">
+            <label class="form-label">Nội dung đề bài kiểm tra (Hỗ trợ văn bản, câu hỏi, liên kết ảnh) *</label>
+            <textarea id="exam-create-content" class="form-control" rows="8" placeholder="Nhập câu hỏi, đề bài kiểm tra tại đây...
+Ví dụ:
+Câu 1: Nêu quy luật địa đới và nguyên nhân hình thành?
+Câu 2: Dựa vào Atlat Địa lý Việt Nam trang 9, hãy phân tích sự phân hóa chế độ nhiệt của nước ta..." required></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-exam-create')">Hủy Bỏ</button>
+          <button type="submit" class="btn btn-primary" id="btn-submit-create-exam">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Kích Hoạt Bài Kiểm Tra</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ====================================================================
+       3. MODAL QUẢN LÝ BÀI KIỂM TRA & XEM BÀI NỘP (ADMIN / DEV MANAGER)
+       ==================================================================== -->
+  <div class="modal-backdrop" id="modal-exam-admin" style="z-index: 10000005;">
+    <div class="modal-box modal-lg" style="max-width: 960px;">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div style="width: 36px; height: 36px; border-radius: 8px; background: linear-gradient(135deg, #f59e0b, #d97706); color: white; display: flex; align-items: center; justify-content: center;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          </div>
+          <div>
+            <h3 class="modal-title" style="margin: 0; font-family: 'Space Grotesk', sans-serif;">Quản Lý Phòng Thi & Danh Sách Bài Nộp</h3>
+            <span style="font-size: 0.78rem; color: var(--text-muted);">Bật/Tắt khóa trình duyệt và theo dõi bài làm của thí sinh</span>
+          </div>
+        </div>
+        <button type="button" class="btn-close" onclick="closeModal('modal-exam-admin')">&times;</button>
+      </div>
+
+      <!-- Navigation Tabs in Admin Modal -->
+      <div class="exam-admin-nav-tabs">
+        <button type="button" class="exam-admin-tab-btn active" id="btn-exam-tab-list" onclick="switchExamAdminTab('exams')">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg>
+          <span>Danh Sách Đề Thi (<strong id="admin-exams-count">0</strong>)</span>
+        </button>
+        <button type="button" class="exam-admin-tab-btn" id="btn-exam-tab-subs" onclick="switchExamAdminTab('submissions')">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><polyline points="17 11 19 13 23 9"/></svg>
+          <span>Bài Nộp Thí Sinh (<strong id="admin-subs-count">0</strong>)</span>
+        </button>
+      </div>
+
+      <div class="modal-body" style="padding: 16px 20px;">
+        <!-- TAB 1: Danh sách bài thi -->
+        <div id="exam-admin-pane-exams" class="exam-admin-pane active">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <span style="font-size: 0.85rem; color: var(--text-muted);">Quản trị viên có thể bật/tắt khóa trình duyệt tức thời cho từng bài thi.</span>
+            <button type="button" class="btn btn-sm btn-primary" onclick="closeModal('modal-exam-admin'); openCreateExamModal();">+ Tạo Đề Thi Mới</button>
+          </div>
+          <div class="exam-admin-table-wrap">
+            <table class="custom-table" style="width: 100%;">
+              <thead>
+                <tr>
+                  <th>Tên Bài Kiểm Tra</th>
+                  <th>Mã Truy Cập</th>
+                  <th>Thời Gian</th>
+                  <th>Chế Độ</th>
+                  <th>Khóa Trình Duyệt</th>
+                  <th>Thao Tác</th>
+                </tr>
+              </thead>
+              <tbody id="exam-admin-table-body">
+                <!-- Rendered dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- TAB 2: Danh sách bài nộp -->
+        <div id="exam-admin-pane-submissions" class="exam-admin-pane" style="display: none;">
+          <div class="exam-sub-filter-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <select id="exam-sub-filter-select" class="form-control" style="max-width: 280px;" onchange="renderExamSubmissionsTable()">
+              <option value="all">Tất cả bài kiểm tra</option>
+            </select>
+            <span style="font-size: 0.8rem; color: var(--text-muted);" id="exam-subs-summary-text">0 bài nộp</span>
+          </div>
+          <div class="exam-admin-table-wrap" style="margin-top: 10px;">
+            <table class="custom-table" style="width: 100%;">
+              <thead>
+                <tr>
+                  <th>Thí Sinh</th>
+                  <th>Bài Kiểm Tra</th>
+                  <th>Thời Gian Nộp</th>
+                  <th>Thời Lượng</th>
+                  <th>Cảnh Báo Vi Phạm</th>
+                  <th>Hành Động</th>
+                </tr>
+              </thead>
+              <tbody id="exam-submissions-table-body">
+                <!-- Rendered dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Submission Detail Preview Box -->
+        <div id="exam-submission-detail-card" class="exam-sub-detail-card" style="display: none; margin-top: 16px; border: 1.5px solid var(--primary); border-radius: 10px; padding: 16px; background: var(--bg-surface);">
+          <div class="exam-sub-detail-header" style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+            <div>
+              <h4 id="detail-sub-student-name" style="margin: 0; font-size: 1.05rem; color: var(--primary);">Chi tiết bài làm</h4>
+              <span id="detail-sub-meta" style="font-size: 0.78rem; color: var(--text-muted);">---</span>
+            </div>
+            <button type="button" class="btn btn-sm btn-secondary" onclick="closeSubmissionDetailCard()">Đóng xem chi tiết</button>
+          </div>
+          <div class="exam-sub-violations-box" id="detail-sub-violations-box" style="display: none; margin-bottom: 12px; padding: 10px 14px; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 8px;">
+            <!-- Rendered if violations exist -->
+          </div>
+          <div class="exam-sub-answers-content" id="detail-sub-answers-content" style="white-space: pre-wrap; font-family: inherit; font-size: 0.92rem; line-height: 1.6; padding: 14px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; max-height: 350px; overflow-y: auto;">
+            <!-- Answer text -->
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('modal-exam-admin')">Đóng</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="brand-logo" style="margin-bottom: 12px;" onclick="switchTab('home')">
+            <div class="brand-icon-wrapper">
+              <img src="assets/logo.png" alt="High School Help Kit" class="brand-logo-img">
+            </div>
+            <div class="brand-text">
+              <span class="brand-title" style="color: white;">Geography <span style="color: #34d399;">Edu</span></span>
+              <span class="brand-subtitle" style="color: #94a3b8;">High School Help Kit</span>
+            </div>
+          </div>
+          <p data-i18n="footerDevInfo">
+            Dự án giáo dục phi lợi nhuận cung cấp kho dữ liệu số và phương pháp tư duy Địa lí toàn diện cho học sinh cả
+            nước.
+          </p>
+        </div>
+
+        <div class="footer-col">
+          <h4 data-i18n="footerColCategories">Danh Mục Tài Liệu</h4>
+          <ul class="footer-links">
+            <li><a href="javascript:void(0)"
+                onclick="switchTab('documents'); appState.docFilter.mainCat='dai_cuong'; appState.docFilter.subCat='tu_nhien'; renderDocumentsView();">Địa
+                lí đại cương - Tự nhiên</a></li>
+            <li><a href="javascript:void(0)"
+                onclick="switchTab('documents'); appState.docFilter.mainCat='dai_cuong'; appState.docFilter.subCat='kinh_te_xa_hoi'; renderDocumentsView();">Địa
+                lí đại cương - KT-XH</a></li>
+            <li><a href="javascript:void(0)"
+                onclick="switchTab('documents'); appState.docFilter.mainCat='viet_nam'; appState.docFilter.subCat='tu_nhien'; renderDocumentsView();">Địa
+                lí Việt Nam - Tự nhiên</a></li>
+            <li><a href="javascript:void(0)"
+                onclick="switchTab('documents'); appState.docFilter.mainCat='viet_nam'; appState.docFilter.subCat='kinh_te_xa_hoi'; renderDocumentsView();">Địa
+                lí Việt Nam - KT-XH</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4 data-i18n="footerColQuickLinks">Liên Kết Nhanh</h4>
+          <ul class="footer-links">
+            <li><a href="javascript:void(0)" onclick="switchTab('home')" data-i18n="footerHomeLink">Trang chủ dự án</a>
+            </li>
+            <li><a href="javascript:void(0)" onclick="switchTab('documents')" data-i18n="footerDocsLink">Kho tài
+                liệu</a></li>
+            <li><a href="javascript:void(0)" onclick="switchTab('saved')" data-i18n="footerSavedLink">Tài liệu đã
+                lưu</a></li>
+            <li><a href="javascript:void(0)" onclick="switchTab('contact')" data-i18n="footerContactLink">Liên hệ &amp;
+                Confession</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4 data-i18n="footerColCommunity">Cộng Đồng</h4>
+          <ul class="footer-links">
+            <li><a href="javascript:void(0)" onclick="switchTab('home')" data-i18n="footerHshkLink">Dự án High School
+                Help Kit</a></li>
+            <li><a href="javascript:void(0)" onclick="switchTab('home')" data-i18n="footerGroupLink">Group Địa Lí</a>
+            </li>
+            <li><a href="javascript:void(0)" onclick="openModal('modal-register')" data-i18n="footerRegLink">Đăng ký
+                thành viên</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div data-i18n="footerCopyright">© 2026 Geography Edu - High School Help Kit. Tất cả quyền được bảo lưu.</div>
+        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+          <span data-i18n="footerDevInfo">Xây dựng với tâm huyết vì nền giáo dục Địa lí Việt Nam • Nhà phát triển: Trần
+            Huy Vũ</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Mobile Bottom Navigation Bar -->
+  <nav class="bottom-nav-bar" id="bottom-nav-bar" aria-label="Mobile Navigation">
+    <button type="button" class="bottom-nav-item active" data-tab="home" onclick="switchTab('home')">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+      </svg>
+      <span data-i18n="navHome">Trang chủ</span>
+    </button>
+    <button type="button" class="bottom-nav-item" data-tab="documents" onclick="switchTab('documents')">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+      </svg>
+      <span data-i18n="navDocs">Kho tài liệu</span>
+    </button>
+    <button type="button" class="bottom-nav-item bottom-nav-ai" data-tab="ai-chat" onclick="switchTab('ai-chat')">
+      <div class="bottom-nav-icon-wrap">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="M8 12h.01M12 12h.01M16 12h.01"></path>
+        </svg>
+        <span class="bottom-ai-badge">AI</span>
+      </div>
+      <span data-i18n="navAi">Hỏi AI</span>
+    </button>
+    <button type="button" class="bottom-nav-item" id="bottom-nav-menu-btn" onclick="toggleMobileNav(event)">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+      <span>Menu</span>
+    </button>
+  </nav>
+
+  <!-- ========================= GLOBE 3D SECTION ========================= -->
+  <!-- This section is shown when user clicks the Globe nav item -->

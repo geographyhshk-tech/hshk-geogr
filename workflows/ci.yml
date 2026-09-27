@@ -1,0 +1,55 @@
+name: Continuous Integration & Security Suite
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  test-and-security:
+    name: Build, Test & Security Verification
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js Environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci || npm install
+
+      - name: Verify No Secrets Committed
+        run: |
+          echo "Scanning for accidental .env file inclusion..."
+          if [ -f .env ]; then
+            echo "ERROR: .env file found in repository root! Please remove it from git tracking."
+            exit 1
+          fi
+          echo "No .env leak detected."
+
+      - name: Run Automated Test Suite
+        run: npm test
+
+      - name: Verify Zero Emoji Compliance
+        run: |
+          echo "Checking codebase for strict zero-emoji compliance..."
+          node -e '
+            const fs = require("fs");
+            const path = require("path");
+            const emojiRegex = /[\uD83C-\uDBFF\uDC00-\uDFFF\u2600-\u27BF]/;
+            const jsFiles = fs.readdirSync("js").filter(f => f.endsWith(".js"));
+            for (const f of jsFiles) {
+              const content = fs.readFileSync(path.join("js", f), "utf-8");
+              if (emojiRegex.test(content)) {
+                console.error("FAIL: Emoji detected in js/" + f);
+                process.exit(1);
+              }
+            }
+            console.log("PASS: Codebase is 100% emoji-free.");
+          '
